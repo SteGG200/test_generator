@@ -1,15 +1,11 @@
 from handler import create_exam_document
 
 def test():
-	with open("content.md", "r") as file:
+	with open("./dist/20250217_152828/content.md", "r") as file:
 		content = file.read()
 		try:
 			print("Đang tạo tài liệu...")
-			doc = create_exam_document(content)
-
-			filename = "./dist/de_thi.docx" 
-			doc.save(filename)
-			print(f"Đã tạo đề thi thành công và lưu với tên: {filename}")
+			create_exam_document(content)
 		except Exception as err:
 			print(err)
 

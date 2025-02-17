@@ -1,3 +1,4 @@
+import os
 from docx import Document
 from docx.shared import Pt, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -54,7 +55,7 @@ def add_page_number(run: Run):
 	run._r.append(instrText2)
 	run._r.append(fldChar4)
 
-def create_exam_document(exam_content: str):
+def create_exam_document(path: str, exam_content: str):
 	if len(exam_content) == 0:
 		raise ValueError("Nội dung đề thi không hợp lệ")
 
@@ -112,6 +113,7 @@ def create_exam_document(exam_content: str):
 	total_number_questions = 0
 	question_section = None
 	for line in lines:
+		line = line.strip()
 		if line == '': continue
 		if line.startswith("**Câu"):
 			question_section = doc.add_paragraph()
@@ -137,4 +139,7 @@ def create_exam_document(exam_content: str):
 	footer.add_run('- Thí sinh không được sử dụng tài liệu;\n').italic = True
 	footer.add_run('- Cán bộ coi thi không giải thích gì thêm.').italic = True
 	
-	return doc
+	# Save to file docx
+	filename = "de_thi.docx"
+	doc.save(f"{path}/{filename}")
+	print(f"Đã tạo đề thi thành công và lưu với tên: {path}/{filename}")
