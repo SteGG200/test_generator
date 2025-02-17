@@ -9,8 +9,7 @@ This tool uses API from [OpenRouter](https://openrouter.ai/)
 ## Instruction
 
 **Requirements tool**: 
-- git
-- python 3
+- python 3.8+
 
 Optional, you can create a virtual environment for project by using `virtualenv` or `venv`
 
@@ -39,8 +38,8 @@ The docx file will be generated in folder `./dist/{timeCreated}/`. Additionally,
 
 ```yaml
 handler:
-	- apiHandler # Handler prompting and returning responses from OpenRouter API
-	- docxHandler # Handler generating file docx
+  - apiHandler # Handler prompting and returning responses from OpenRouter API
+  - docxHandler # Handler generating file docx
 main # Entry point
 test
 ```
