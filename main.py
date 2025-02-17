@@ -1,10 +1,7 @@
 from handler import get_exam_content
 from handler import create_exam_document
-import dotenv
 
 def main():
-	dotenv.load_dotenv()
-
 	try:
 		# Get exam content from API
 		print("Đang tạo nội dung đề thi...")

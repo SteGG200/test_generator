@@ -1,5 +1,8 @@
 from openai import OpenAI
 import os
+import dotenv
+
+dotenv.load_dotenv()
 
 API_KEY = os.environ.get('API_KEY')
 BASE_URL = 'https://openrouter.ai/api/v1/'
