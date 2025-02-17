@@ -4,14 +4,14 @@ Exam Generator is a python tool for generating exam about HTML and CSS
 
 This tool uses API from [OpenRouter](https://openrouter.ai/)
 
-[Instruction](#instruction) | [Usage](#usage)
+[Installation](#installation) | [Usage](#usage)
 
-## Instruction
+## Installation
 
 **Requirements tool**: 
 - python 3.8+
 
-Optional, you can create a virtual environment for project by using `virtualenv` or `venv`
+Optionally, you can create a virtual environment for project by using `virtualenv` or `venv` before installation step.
 
 Installation dependencies:
 ```bash
@@ -32,7 +32,7 @@ To run the tool, use following command:
 python main.py
 ```
 
-The docx file will be generated in folder `./dist/{timeCreated}/`. Additionally, there is also a file named `content.md` in the same folder.
+The output file is `de_thi.docx` inside folder `dist/{timeCreated}`. Additionally, there is also a file named `content.md` in the same folder which displays the response from the OpenRouter API.
 
 ## Directory Structure
 
