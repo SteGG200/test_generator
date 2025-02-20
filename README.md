@@ -19,8 +19,15 @@ pip install -r requirements.txt
 ```
 
 Set environment variable `API_KEY` to your OpenRouter API key
+
+For Linux:
 ```bash
 export API_KEY=<OPENROUTER_API_KEY>
+```
+
+For Windows Powershell:
+```powershell
+$env:API_KEY=<OPENROUTER_API_KEY>w
 ```
 
 Or you can also create a file `.env` and set variable `API_KEY`
