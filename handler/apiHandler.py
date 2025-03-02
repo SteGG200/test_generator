@@ -56,22 +56,19 @@ def get_exam_content(path: str):
 		base_url=BASE_URL
 	)
 	
-	try:
-		response = client.chat.completions.create(
-			model=MODEL,
-			messages=[
-				{"role": "user", "content": create_exam_prompt()}
-			]
-		)
-		content = response.choices[0].message.content
-		
-		log_name = "content.md"
-		log = open(f"{path}/{log_name}", "w+")
+	response = client.chat.completions.create(
+		model=MODEL,
+		messages=[
+			{"role": "user", "content": create_exam_prompt()}
+		]
+	)
+	content = response.choices[0].message.content
+	
+	log_name = "content.md"
+	log = open(f"{path}/{log_name}", "w+")
 
-		log.write(content)
+	log.write(content)
 
-		log.close()
+	log.close()
 
-		return content
-	except Exception as e:
-		raise Exception(f"Lỗi khi gọi API: {str(e)}")
+	return content
