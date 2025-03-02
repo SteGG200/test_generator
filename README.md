@@ -39,7 +39,7 @@ To run the tool, use following command:
 python main.py
 ```
 
-The output file is `de_thi.docx` inside folder `dist/{timeCreated}`. Additionally, there is also a file named `content.md` in the same folder which displays the response from the OpenRouter API.
+The output file is `de_thi.docx` inside folder `dist/{timeCreated}`. Additionally, there is also a file named `content.md` in the same folder which shows the response from the OpenRouter API.
 
 ## Directory Structure
 
