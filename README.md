@@ -30,7 +30,7 @@ export API_KEY=<OPENROUTER_API_KEY>
 
 For Windows Powershell:
 ```powershell
-$env:API_KEY=<OPENROUTER_API_KEY>w
+$env:API_KEY=<OPENROUTER_API_KEY>
 ```
 
 Or you can also create a `.env` file and set variable `API_KEY=<OPENROUTER_API_KEY>`
