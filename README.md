@@ -1,6 +1,6 @@
 # Exam Generator Tool
 
-Exam Generator is a python tool for generating exam about HTML and CSS
+Exam Generator is a python tool for generating exam
 
 This tool uses API from [OpenRouter](https://openrouter.ai/)
 
@@ -52,9 +52,9 @@ dist/{timeCreated}:
 
 ## Customizing the prompt
 
-Additionally, you can modify default prompt in `prompt.txt` file to change the output format to whatever you want. 
+Additionally, you can modify default prompt in `prompt.txt` file to change the output content to whatever you want. 
 
-However, you mst ensure that the `content.txt` file follows the format below (assuming that option b is the correct answer):
+However, you must ensure that the `content.txt` file follows the format below (assuming that option b is the correct answer):
 
 ```txt
 [Question number]. [Question content]
@@ -68,7 +68,7 @@ A correct answer always begins with a asterisk (*). Each question is separated b
 
 For example:
 
-```
+```txt
 1. Thuộc tính CSS nào được sử dụng để thay đổi màu chữ của một phần tử?
 a) font-color
 *b) color
