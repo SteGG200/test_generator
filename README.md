@@ -14,7 +14,7 @@ This tool uses API from [OpenRouter](https://openrouter.ai/)
 **Requirements tool**: 
 - python 3.8+
 
-Optionally, you can create a virtual environment for project by using `virtualenv` or `venv` before installation step.
+You can optionally create a virtual environment for project by using `virtualenv` or `venv` before installation step.
 
 Installation dependencies:
 ```bash
@@ -52,7 +52,7 @@ dist/{timeCreated}:
 
 ## Customizing the prompt
 
-Additionally, you can modify default prompt in `prompt.txt` file to change the output content to whatever you want. 
+You can modify default prompt in `prompt.txt` file to change the output content to whatever you want. 
 
 However, you must ensure that the `content.txt` file follows the format below (assuming that option b is the correct answer):
 
@@ -80,6 +80,19 @@ a) `<ol>`
 b) `<li>`
 *c) `<ul>`
 d) `<dl>`
+```
+
+### Comment in prompt:
+
+Use `//` or `/**/` syntax to comment in your prompt.
+
+```txt
+// This line isn't included in the prompt
+
+/*
+This is also comment 
+and isn't included.
+*/
 ```
 
 ## Directory Structure

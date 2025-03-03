@@ -12,9 +12,53 @@ def get_prompt():
 	# Read prompt content from file prompt.txt
 	prompt_file = open('prompt.txt', 'r')
 	prompt_content = prompt_file.read()
+
+	# Remove comments from prompt content
+	stack_comment_symbols = []
+	buffer_comment_symbols = ""
+	parsed_prompt_content = ""
+	for index, char in enumerate(prompt_content):
+		if len(stack_comment_symbols) > 0:
+			if stack_comment_symbols[-1] == '//':
+				if char == '\n': 
+					parsed_prompt_content += '\n'
+					stack_comment_symbols.pop()
+				continue
+			elif stack_comment_symbols[-1] == '/*':
+				if char == '/' and index - 1 >= 0 and prompt_content[index - 1] == '*':
+					stack_comment_symbols.pop()
+				continue
+			else:
+				raise SyntaxError(f'Invalid comment syntax: {stack_comment_symbols[-1]}')
+		if char == '/':
+			if buffer_comment_symbols == '/':
+				stack_comment_symbols.append("//")
+				buffer_comment_symbols = ""
+			elif buffer_comment_symbols == '':
+				buffer_comment_symbols = "/"
+			else:
+				raise BufferError(f"Invalid comment syntax in buffer: {buffer_comment_symbols}")
+		elif char == '*':
+			if buffer_comment_symbols == '/':
+				stack_comment_symbols.append("/*")
+				buffer_comment_symbols = ""
+			elif buffer_comment_symbols == '':
+				parsed_prompt_content += char
+			else:
+				raise BufferError(f"Invalid comment syntax in buffer: {buffer_comment_symbols}")
+		else:
+			if buffer_comment_symbols == '/':
+				parsed_prompt_content += buffer_comment_symbols
+				parsed_prompt_content += char
+				buffer_comment_symbols = ""
+			elif buffer_comment_symbols == '':
+				parsed_prompt_content += char
+			else:
+				raise BufferError(f"Invalid comment syntax in buffer: {buffer_comment_symbols}")
+
 	prompt_file.close()
 
-	return prompt_content
+	return parsed_prompt_content
 
 def get_exam_content(path: str):
 	client = OpenAI(
