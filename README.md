@@ -30,7 +30,7 @@ For Windows Powershell:
 $env:API_KEY=<OPENROUTER_API_KEY>w
 ```
 
-Or you can also create a file `.env` and set variable `API_KEY`
+Or you can also create a `.env` file and set variable `API_KEY=<OPENROUTER_API_KEY>`
 
 ## Usage
 
@@ -46,6 +46,8 @@ dist/{timeCreated}:
   - qti.zip # QTI file for Canvas
   - dethi.docx # Microsoft Word File
 ```
+
+Additionally, you can modify default prompt in `prompt.txt` file to change the output format to whatever you want.
 
 ## Directory Structure
 
