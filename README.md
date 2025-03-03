@@ -4,7 +4,10 @@ Exam Generator is a python tool for generating exam about HTML and CSS
 
 This tool uses API from [OpenRouter](https://openrouter.ai/)
 
-[Installation](#installation) | [Usage](#usage)
+## Table of Contents
+- [Installation](#installation)
+- [Basic usage](#basic-usage)
+- [Customizing the prompt](#customizing-the-prompt)
 
 ## Installation
 
@@ -32,14 +35,14 @@ $env:API_KEY=<OPENROUTER_API_KEY>w
 
 Or you can also create a `.env` file and set variable `API_KEY=<OPENROUTER_API_KEY>`
 
-## Usage
+## Basic usage
 
 To run the tool, use following command:
 ```bash
 python main.py
 ```
 
-Output:
+This is the output:
 ```yaml
 dist/{timeCreated}:
   - content.txt # Response from OpenRouter API
@@ -47,7 +50,37 @@ dist/{timeCreated}:
   - dethi.docx # Microsoft Word File
 ```
 
-Additionally, you can modify default prompt in `prompt.txt` file to change the output format to whatever you want.
+## Customizing the prompt
+
+Additionally, you can modify default prompt in `prompt.txt` file to change the output format to whatever you want. 
+
+However, you mst ensure that the `content.txt` file follows the format below (assuming that option b is the correct answer):
+
+```txt
+[Question number]. [Question content]
+a) [Option a]
+*b) [Option b]
+c) [Option c]
+d) [Option d]
+```
+
+A correct answer always begins with a asterisk (*). Each question is separated by a blank line.
+
+For example:
+
+```
+1. Thuộc tính CSS nào được sử dụng để thay đổi màu chữ của một phần tử?
+a) font-color
+*b) color
+c) text-color
+d) foreground-color
+
+2. Thẻ HTML nào được sử dụng để tạo một danh sách không có thứ tự?
+a) `<ol>`
+b) `<li>`
+*c) `<ul>`
+d) `<dl>`
+```
 
 ## Directory Structure
 
