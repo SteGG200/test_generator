@@ -1,13 +1,11 @@
 from handler import create_exam_document
 
 def test():
-	with open("./dist/20250217_152828/content.md", "r") as file:
+	path = "./dist/20250303_144235"
+	with open(f"{path}/content.txt", "r") as file:
 		content = file.read()
-		try:
-			print("Đang tạo tài liệu...")
-			create_exam_document(content)
-		except Exception as err:
-			print(err)
+		print("Đang tạo tài liệu...")
+		create_exam_document(path, content)
 
 if __name__ == "__main__":
 	test()

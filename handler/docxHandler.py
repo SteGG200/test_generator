@@ -6,6 +6,7 @@ from docx.enum.table import WD_ALIGN_VERTICAL
 from docx.oxml import OxmlElement, ns
 from docx.oxml.xmlchemy import BaseOxmlElement
 from docx.text.run import Run
+from docx.text import paragraph
 
 def create_element(name):
 	return OxmlElement(name)
@@ -111,23 +112,44 @@ def create_exam_document(path: str, exam_content: str):
 	# Add exam content
 	lines = exam_content.split('\n')
 	total_number_questions = 0
-	question_section = None
+	question_section: paragraph.Paragraph = None
 	for line in lines:
 		line = line.strip()
-		if line == '': continue
-		if line.startswith("**Câu"):
+		if line == '': 
+			question_section = None
+			continue
+		if question_section is not None:
+			if line.startswith(('a)', 'b)', 'c)', 'd)')):
+				array_answer = line.split(')', 1)
+				if len(array_answer)!= 2:
+					raise ValueError('Invalid array answer format')
+				order_answer, content_answer = array_answer
+				question_section.add_run(f'\n{order_answer.upper()}. ').bold = True
+				question_section.add_run(content_answer)
+				question_section.add_run()
+			elif line.startswith('*'):
+				array_answer = line[1:].split(')', 1)
+				if len(array_answer)!= 2:
+					raise ValueError('Invalid array answer format')
+				order_answer, content_answer = array_answer
+				order_answer_section = question_section.add_run(f'\n{order_answer.upper()}. ')
+				order_answer_section.underline = True
+				order_answer_section.bold = True
+				question_section.add_run(content_answer)
+		else:
+			index_separator = line.find('.')
+			if index_separator == -1:
+				raise ValueError('Invalid question format')
+			array_answer = line.split('.', 1)
+			if len(array_answer)!= 2:
+				raise ValueError('Invalid question format')
+			number_question, content_question = array_answer
+			if not number_question.isnumeric():
+				raise ValueError('Invalid question format')
 			question_section = doc.add_paragraph()
 			total_number_questions += 1
-			number_question, content_question = line[2:].split('**')
-			question_section.add_run(number_question).bold = True
+			question_section.add_run(f'Câu {number_question}: ').bold = True
 			question_section.add_run(content_question)
-		elif question_section == None: raise ValueError("Invalid question format.")
-		elif line.strip().startswith(('**A', '**B', '**C', '**D')):
-			order_answer, content_answer = line[2:].split('**')
-			question_section.add_run(f'\n{order_answer}').bold = True
-			question_section.add_run(f'{content_answer}')
-		else:
-			question_section.add_run(f'\n{line}')
 
 	# Add total number of questions
 	instructions.add_run(f'Thí sinh trả lời từ câu 1 đến câu {total_number_questions}. Mỗi câu hỏi thí sinh chỉ chọn một phương án.')

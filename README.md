@@ -39,13 +39,20 @@ To run the tool, use following command:
 python main.py
 ```
 
-The output file is `de_thi.docx` inside folder `dist/{timeCreated}`. Additionally, there is also a file named `content.md` in the same folder which shows the response from the OpenRouter API.
+Output:
+```yaml
+dist/{timeCreated}:
+  - content.txt # Response from OpenRouter API
+  - qti.zip # QTI file for Canvas
+  - dethi.docx # Microsoft Word File
+```
 
 ## Directory Structure
 
 ```yaml
 handler:
   - apiHandler # Handler prompting and returning responses from OpenRouter API
+  - convertHandler # Handler converting exam content to QTI file
   - docxHandler # Handler generating file docx
 main # Entry point
 test
