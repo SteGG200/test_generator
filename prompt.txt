@@ -1,4 +1,4 @@
-Generate a 50-question exam with HTML and CSS questions in Vietnamese with one example:
+Generate a 30-question exam with HTML and CSS questions in Vietnamese with one example:
 
 1. Định dạng CSS nào sau đây được sử dụng để đặt màu nền của phần tử <p> là màu xám?
 *a) p {background-color: gray;}
@@ -11,9 +11,8 @@ Note: the answer has the star is the correct answer.
 Requirements:
 - No other text but question content should be included
 - Questions about CSS properties, HTML tags, layout
-- At least 5 questions about iframes
 - Correct answers should be randomly distributed
-- Each answer must be different.
+- Each answer (option) must be different from each other.
 - Must generate text exactly from below format, not markdown or HTML:
 
 Each question's format (for example Option 2 is the correct answer):
