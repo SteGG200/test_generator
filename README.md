@@ -57,7 +57,7 @@ You can modify default prompt in `prompt.txt` file to change the output content 
 However, you must ensure that the `content.txt` file follows the format below (assuming that option b is the correct answer):
 
 ```txt
-[Question number]. [Question content]
+[Number]. [Question]
 a) [Option a]
 *b) [Option b]
 c) [Option c]
@@ -66,21 +66,55 @@ d) [Option d]
 
 A correct answer always begins with a asterisk (*). Each question is separated by a blank line.
 
+About multi-line question or multi-line answer:
+
+```txt
+|
+| /* Indentation:
+| Question or answer that oppucies more than 1 line 
+| must have at least this indentation*/
+| |
+1. [Question]
+| |
+| [Question continued, so indentation]
+| |
+a) [Possible answer]
+| |
+| [Possible answer continued, so indentation]
+| |
+*b) [Correct answer]
+|
+...
+```
+
 For example:
 
 ```txt
 1. Thuộc tính CSS nào được sử dụng để thay đổi màu chữ của một phần tử?
-a) font-color
-*b) color
-c) text-color
-d) foreground-color
+a) `font-color`
+*b) `color`
+c) `text-color`
+d) `foreground-color`
 
-2. Thẻ HTML nào được sử dụng để tạo một danh sách không có thứ tự?
-a) `<ol>`
-b) `<li>`
-*c) `<ul>`
-d) `<dl>`
+2. Đoạn mã:
+	```
+	<ol type="A" start="3">
+		<li>Item 1</li>
+		<li>Item 2</li>
+	</ol>
+	```
+	Kết quả hiển thị sẽ như thế nào?
+a) 1. Item 1
+	2. Item 2
+b) A. Item 1
+	B. Item 2
+*c) C. Item 1
+	D. Item 2
+d) 3. Item 1
+	4. Item 2
 ```
+
+**Note**: code block like HTML tags should be put in backticks to ensure QTI output is correct.
 
 ### Comment in prompt:
 
