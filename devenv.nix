@@ -1,7 +1,5 @@
 {
-  enterShell = ''
-    echo "Please set the environment variable API_KEY manually for now."
-  '';
+  dotenv.enable = true;
   languages.python = {
     enable = true;
     venv = {
