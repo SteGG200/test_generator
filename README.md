@@ -5,18 +5,22 @@ Exam Generator is a python tool for generating exam
 This tool uses API from [OpenRouter](https://openrouter.ai/)
 
 ## Table of Contents
+
 - [Installation](#installation)
 - [Basic usage](#basic-usage)
 - [Customizing the prompt](#customizing-the-prompt)
 
 ## Installation
 
-**Requirements tool**: 
+**Requirements tool**:
+
 - python 3.8+
 
-You can optionally create a virtual environment for project by using `virtualenv` or `venv` before installation step.
+You can optionally create a virtual environment for project by using
+`virtualenv` or `venv` before installation step.
 
 Installation dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -24,37 +28,44 @@ pip install -r requirements.txt
 Set environment variable `API_KEY` to your OpenRouter API key
 
 For Linux:
+
 ```bash
 export API_KEY=<OPENROUTER_API_KEY>
 ```
 
 For Windows Powershell:
+
 ```powershell
 $env:API_KEY=<OPENROUTER_API_KEY>
 ```
 
-Or you can also create a `.env` file and set variable `API_KEY=<OPENROUTER_API_KEY>`
+Or you can also create a `.env` file and set variable
+`API_KEY=<OPENROUTER_API_KEY>`
 
 ## Basic usage
 
 To run the tool, use following command:
+
 ```bash
 python main.py
 ```
 
 This is the output:
+
 ```yaml
-dist/{timeCreated}:
-  - content.txt # Response from OpenRouter API
-  - qti.zip # QTI file for Canvas
-  - dethi.docx # Microsoft Word File
+dist/{promptName}_{timeCreated}:
+    - content.txt # Response from OpenRouter API
+    - qti.zip # QTI file for Canvas
+    - dethi.docx # Microsoft Word File
 ```
 
 ## Customizing the prompt
 
-You can modify default prompt in `prompt.txt` file to change the output content to whatever you want. 
+You can put prompts under the `prompts` directory. They will be processed
+sequentially.
 
-However, you must ensure that the `content.txt` file follows the format below (assuming that option b is the correct answer):
+However, you must ensure that the `content.txt` file follows the format below
+(assuming that option b is the correct answer):
 
 ```txt
 [Number]. [Question]
@@ -64,14 +75,15 @@ c) [Option c]
 d) [Option d]
 ```
 
-A correct answer always begins with a asterisk (*). Each question is separated by a blank line.
+A correct answer always begins with a asterisk (\*). Each question is separated
+by a blank line.
 
 About multi-line question or multi-line answer:
 
 ```txt
 |
 | /* Indentation:
-| Question or answer that oppucies more than 1 line 
+| Question or answer that oppucies more than 1 line
 | must have at least this indentation*/
 | |
 1. [Question]
@@ -89,7 +101,7 @@ a) [Possible answer]
 
 For example:
 
-```txt
+````txt
 1. Thuộc tính CSS nào được sử dụng để thay đổi màu chữ của một phần tử?
 a) `font-color`
 *b) `color`
@@ -112,9 +124,10 @@ b) A. Item 1
 	D. Item 2
 d) 3. Item 1
 	4. Item 2
-```
+````
 
-**Note**: code block like HTML tags should be put in backticks to ensure QTI output is correct.
+**Note**: code block like HTML tags should be put in backticks to ensure QTI
+output is correct.
 
 ### Comment in prompt:
 
@@ -124,7 +137,7 @@ Use `//` or `/**/` syntax to comment in your prompt.
 // This line isn't included in the prompt
 
 /*
-This is also comment 
+This is also comment
 and isn't included.
 */
 ```
@@ -139,3 +152,4 @@ handler:
 main # Entry point
 test
 ```
+
