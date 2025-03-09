@@ -14,7 +14,19 @@ This tool uses API from [OpenRouter](https://openrouter.ai/)
 **Requirements tool**: 
 - python 3.8+
 
-You can optionally create a virtual environment for project by using `virtualenv` or `venv` before installation step.
+Create virtual environment:
+
+For Unix:
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+For Windows:
+```
+python -m venv venv
+.\venv\bin\activate
+```
 
 Installation dependencies:
 ```bash
