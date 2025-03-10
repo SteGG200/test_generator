@@ -6,7 +6,10 @@ dotenv.load_dotenv()
 
 API_KEY = os.environ.get('API_KEY')
 BASE_URL = 'https://openrouter.ai/api/v1/'
-MODEL = 'google/gemini-2.0-pro-exp-02-05:free'
+MODEL = os.environ.get('MODEL')
+
+if MODEL is None:
+	MODEL = 'google/gemini-2.0-pro-exp-02-05:free'
 
 def get_prompt():
 	# Read prompt content from file prompt.txt
@@ -61,6 +64,7 @@ def get_prompt():
 	return parsed_prompt_content
 
 def get_exam_content(path: str):
+	print(f"Model AI đang sử dụng: {MODEL}")
 	client = OpenAI(
 		api_key=API_KEY,
 		base_url=BASE_URL

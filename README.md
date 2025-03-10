@@ -14,38 +14,29 @@ This tool uses API from [OpenRouter](https://openrouter.ai/)
 **Requirements tool**: 
 - python 3.8+
 
-Create virtual environment:
-
-For Unix:
+For Unix systems:
 ```bash
 python -m venv venv
-source venv/bin/activate
-```
-
-For Windows:
-```
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-```
-
-Installation dependencies:
-```bash
+source ./venv/bin/activate
 pip install -r requirements.txt
-```
-
-Set environment variable `API_KEY` to your OpenRouter API key
-
-For Linux:
-```bash
-export API_KEY=<OPENROUTER_API_KEY>
 ```
 
 For Windows Powershell:
 ```powershell
-$env:API_KEY=<OPENROUTER_API_KEY>
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r requirements.txt
 ```
 
-Or you can also create a `.env` file and set variable `API_KEY=<OPENROUTER_API_KEY>`
+Then, create a file `.env` at the root of the project and set variables like this:
+```env
+API_KEY='<YOUR_OPENROUTER_API_KEY>'
+MODEL='<OPENROUTER_MODEL>'
+```
+
+**Note**: 
+- `API_KEY` is required, `MODEL` is optional.
+- If you don't set the `MODEL` variable, the tool will automatically use the `google/gemini-2.0-pro-exp-02-05:free` model.
 
 ## Basic usage
 
