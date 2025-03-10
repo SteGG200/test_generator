@@ -25,7 +25,7 @@ source venv/bin/activate
 For Windows:
 ```
 python -m venv venv
-.\venv\bin\activate
+.\venv\Scripts\Activate.ps1
 ```
 
 Installation dependencies:
