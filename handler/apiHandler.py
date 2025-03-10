@@ -1,6 +1,7 @@
 from openai import OpenAI
 import os
 import dotenv
+from const import CONTENT_FILE
 
 dotenv.load_dotenv()
 
@@ -79,11 +80,8 @@ def get_exam_content(path: str):
 	content = response.choices[0].message.content
 	
 	# Save response from OpenRouter API to file content.txt
-	log_name = "content.txt"
-	log = open(f"{path}/{log_name}", "w+", encoding='utf-8')
+	log = open(f"{path}/{CONTENT_FILE}", "w+", encoding='utf-8')
 
 	log.write(content)
 
 	log.close()
-
-	return content
