@@ -1,7 +1,7 @@
 from openai import OpenAI
 import os
 import dotenv
-from const import CONTENT_FILE
+from handler.const import CONTENT_FILE
 
 dotenv.load_dotenv()
 

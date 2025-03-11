@@ -1,7 +1,7 @@
 import text2qti.config
 import text2qti.qti
 import text2qti.quiz
-from const import QTI_FILE, CONTENT_FILE
+from handler.const import QTI_FILE, CONTENT_FILE
 
 def convert_to_QTI(path: str, content: str):
 	text2qti_config = text2qti.config.Config()
