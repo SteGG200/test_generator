@@ -45,7 +45,7 @@ To run the tool, use following command:
 python main.py
 ```
 
-This is the output:
+It generates the following output files inside folder `dist/{timeCreated}/`:
 ```yaml
 dist/{timeCreated}:
   - content.txt # Response from OpenRouter API

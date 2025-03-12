@@ -1,4 +1,4 @@
-from handler.const import DOCX_FILE
+from handler.const import DOCX_FILE, CONTENT_FILE
 from docx import Document
 from docx.shared import Pt, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -113,7 +113,7 @@ def create_exam_document(path: str, exam_content: str):
 	lines = exam_content.split('\n')
 	total_number_questions = 0
 	question_section: paragraph.Paragraph = None
-	for line in lines:
+	for line_number, line in enumerate(lines):
 		if line == '': 
 			question_section = None
 			continue
@@ -121,7 +121,7 @@ def create_exam_document(path: str, exam_content: str):
 			if line.startswith(('a)', 'b)', 'c)', 'd)')):
 				array_answer = line.split(')', 1)
 				if len(array_answer)!= 2:
-					raise ValueError('Invalid array answer format')
+					raise ValueError(f'In "{path}/{CONTENT_FILE}" on line {line_number}:\n Invalid array answer format')
 				order_answer, content_answer = array_answer
 				question_section.add_run(f'\n{order_answer.upper()}. ').bold = True
 				question_section.add_run(content_answer)
@@ -129,7 +129,7 @@ def create_exam_document(path: str, exam_content: str):
 			elif line.startswith('*'):
 				array_answer = line[1:].split(')', 1)
 				if len(array_answer)!= 2:
-					raise ValueError('Invalid array answer format')
+					raise ValueError(f'In "{path}/{CONTENT_FILE}" on line {line_number}:\n Invalid array answer format')
 				order_answer, content_answer = array_answer
 				order_answer_section = question_section.add_run(f'\n{order_answer.upper()}. ')
 				order_answer_section.underline = True
@@ -140,13 +140,13 @@ def create_exam_document(path: str, exam_content: str):
 		else:
 			index_separator = line.find('.')
 			if index_separator == -1:
-				raise ValueError('Invalid question format')
+				raise ValueError(f'In "{path}/{CONTENT_FILE}" on line {line_number}:\n Invalid question format')
 			array_answer = line.split('.', 1)
 			if len(array_answer)!= 2:
-				raise ValueError('Invalid question format')
+				raise ValueError(f'In "{path}/{CONTENT_FILE}" on line {line_number}:\n Invalid question format')
 			number_question, content_question = array_answer
 			if not number_question.isnumeric():
-				raise ValueError('Invalid question format')
+				raise ValueError(f'In "{path}/{CONTENT_FILE}" on line {line_number}:\n Invalid question format')
 			question_section = doc.add_paragraph()
 			total_number_questions += 1
 			question_section.add_run(f'Câu {number_question}: ').bold = True
