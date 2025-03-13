@@ -3,6 +3,7 @@ import os
 import dotenv
 import toml
 from openai import OpenAI
+from toml import TomlDecodeError
 
 dotenv.load_dotenv()
 
@@ -96,21 +97,36 @@ def toml_to_qti_compatible(content_toml: str):
 
 
 def get_exam_content(path: str, prompt_dir: str):
-    toml_to_qti_compatible("")
-
     client = OpenAI(api_key=API_KEY, base_url=BASE_URL)
 
-    response = client.chat.completions.create(
-        model=MODEL, messages=[{"role": "user", "content": get_prompt(prompt_dir)}]
-    )
-    content_toml = response.choices[0].message.content
-    assert content_toml != None
+    content_toml = ""
+    content_qti_compatible = ""
+
+    n_attempts = 0
+    succeeded = False
+    while not succeeded:
+        n_attempts += 1
+
+        response = client.chat.completions.create(
+            model=MODEL, messages=[{"role": "user", "content": get_prompt(prompt_dir)}]
+        )
+
+        content_toml = response.choices[0].message.content
+        assert content_toml != None
+
+        try:
+            content_qti_compatible = toml_to_qti_compatible(content_toml)
+            succeeded = True
+        except TomlDecodeError as error_msg:
+            print(f"Lần chạy #{n_attempts} gặp lỗi:\n    {error_msg}")
+            with open(f"{path}/content_failed_{n_attempts}.toml", "w+") as log:
+                log.write(content_toml)
+                log.close()
+            print("Đang thử lại...")
 
     with open(f"{path}/content.toml", "w+") as log:
         log.write(content_toml)
         log.close()
-
-    content_qti_compatible = toml_to_qti_compatible(content_toml)
 
     with open(f"{path}/content.txt", "w+") as log:
         log.write(content_qti_compatible)

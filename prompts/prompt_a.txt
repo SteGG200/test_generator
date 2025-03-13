@@ -2,35 +2,64 @@ Giúp mình tạo một đề thi trắc nghiệm 30 câu về chủ đề Cơ s
 
 Hãy giữ nguyên định dạng TOML như sau cho mỗi câu hỏi.
 
-```
+```toml
 [<Số thứ tự câu>]
-question = """\
-Đây là nội dung câu hỏi."""
+question = """Đây là nội dung câu hỏi. \
+Có thể gồm nhiều dòng."""
 choices = [
-  """\
-    Đây là nội dung phương án A.""",
-  """\
-    Đây là nội dung phương án B.""",
-  """\
-    Đây là nội dung phương án C.""",
-  """\
-    Đây là nội dung phương án D."""
+  """Đây là nội dung phương án A. \
+    Có thể gồm nhiều dòng.""",
+  """Đây là nội dung phương án B. \
+    Có thể gồm nhiều dòng.""",
+  """Đây là nội dung phương án C. \
+    Có thể gồm nhiều dòng.""",
+  """Đây là nội dung phương án D. \
+    Có thể gồm nhiều dòng."""
 ]
 correct_index = 2 # Biểu thị đáp án đúng là C (các đáp án được đánh số từ 0 đến 3)
 ```
 
-Hãy chỉ in ra các câu hỏi như trên!
-Đừng in ra backticks hay TOML format specification.
-Mỗi câu hỏi nên ngăn cách nhau bằng một dòng trống.
+Nhắc lại về format của TOML:
 
-Các phương án nên độc lập với nhau.
-Đừng đưa ra các phương án như "cả A và B đều đúng" hay "tất cả các phương án trên".
+    - Nếu câu hỏi hoặc phương án gồm nhiều dòng thì nối với nhau bằng dấu backslash ở cuối mỗi dòng ` \`.
+
+    - KHÔNG SỬ DỤNG kí tự gì cả để kết thúc dòng (chẳng hạn C/C++ sử dụng ;).
+
+    - LUÔN LUÔN sử dụng dấu """ để bắt đầu và kết thúc string. Không phải " hay '.
+
+    - Dấu = (ngăn cách key và value) và dấu """ (đánh dấu bắt đầu một string) TUYỆT ĐỐI phải nằm trên cùng một hàng. Chẳng hạn câu hỏi dưới đây là SAI!
+
+    ```toml
+    question = # TUYỆT ĐỐI KHÔNG ĐƯỢC xuống dòng ở đây
+    """
+    Nội dung câu hỏi.
+    """
+    ```
+
+Hãy chỉ in ra các câu hỏi như trên!
+TUYỆT ĐỐI KHÔNG in ra backticks hay TOML format specification.
+Mỗi câu hỏi ngăn cách nhau bằng một dòng trống.
 
 Bạn có thể tham khảo các mẫu câu hỏi sau, tuy nhiên hãy sáng tạo.
 
-- "Phát biểu nào sau đây nêu đúng về (một định nghĩa nào đó)?"
-- "Trong (một tình huống nào đó), phương án nào dưới đây là lựa chọn phù hợp?"
-- "Đâu dưới đây là (hoặc không phải là) một trong số những (điều gì đó)?"
+    - "Phát biểu nào sau đây nêu đúng về (một định nghĩa nào đó)?"
+
+    - "Trong (một tình huống nào đó), phương án nào dưới đây là lựa chọn phù hợp?"
+
+    - "Đâu dưới đây là (hoặc không phải là) một trong số những (điều gì đó)?"
+
+    - Tự tạo ra một bảng dữ liệu giả tưởng và đặt câu hỏi về nó.
+
+Các yêu cầu về câu hỏi:
+
+    - Các phương án nên độc lập với nhau. Đừng đưa ra các phương án như "cả A và B đều đúng" hay "tất cả các phương án trên".
+
+    - Đừng sử dụng những từ như "chỉ cho phép", điều này là dấu hiệu dễ thấy rằng phương án sai. Hãy làm phương án đúng ít lộ liễu hơn.
+
+    - Đừng luôn luôn để phát biểu đúng là phát biểu dài nhất, khiến đáp án trở nên dễ đoán. Hãy tránh điều này. Đừng làm đáp án trở nên quá hiển nhiên (chẳng hạn đáp án đúng trông quá khác biệt so với 3 đáp án còn lại).
+
+    - Đừng tạo ra tình huống mơ hồ, chẳng hạn có nhiều đáp án đúng. Hãy CHẮC CHẮN RẰNG có một đáp án đúng nhất và các đáp án còn lại arguably là sai.
+
 
 Dưới đây là nội dung kiến thức các bạn học sinh đã học.
 Đây chỉ là gợi ý, bạn hoàn toàn có thể sử dụng chúng như từ khóa để nghĩ ra những câu hỏi sáng tạo.
@@ -91,42 +120,3 @@ Dưới đây là nội dung kiến thức các bạn học sinh đã học.
     - **biểu mẫu cho cập nhật dữ liệu**: được thiết kế giúp tránh vi phạm ràng
       buộc toàn vẹn, ràng buộc miền giá trị
 ```
-
-Sau đây là một số kiểu câu hỏi không tốt.
-
-```
-24. Biểu mẫu cho cập nhật dữ liệu được thiết kế để làm gì?
-a) Chỉ cho phép thêm dữ liệu mới
-b) Chỉ cho phép xóa dữ liệu
-c) Chỉ cho phép sửa dữ liệu
-*d) Giúp tránh vi phạm các ràng buộc
-```
-
-Câu hỏi này không tốt.
-Đừng sử dụng những từ như "chỉ cho phép", điều này là dấu hiệu dễ thấy rằng phương án sai.
-Hãy làm phương án đúng ít lộ liễu hơn.
-
-```
-1. Phát biểu nào sau đây là đúng về cơ sở dữ liệu (CSDL)?
-a) CSDL là một phần mềm quản lý dữ liệu.
-*b) CSDL là tập hợp dữ liệu được số hóa và lưu trữ trên máy tính.
-c) CSDL là một loại ngôn ngữ lập trình.
-d) CSDL chỉ bao gồm các bảng dữ liệu không liên quan đến nhau.
-````
-
-Câu hỏi này không tốt.
-Phát biểu đúng b đang là phát biểu dài nhất, khiến đáp án trở nên dễ đoán. Hãy tránh điều này.
-Đừng làm đáp án trở nên quá hiển nhiên (chẳng hạn đáp án đúng trông quá khác biệt so với 3 đáp án còn lại).
-
-```
-19. Biểu mẫu cho cập nhật dữ liệu có thể giúp ích gì trong việc đảm bảo chất lượng của dữ liệu?
-a) Tăng tốc độ truy vấn dữ liệu.
-b) Cho phép người dùng thay đổi cấu trúc cơ sở dữ liệu.
-*c) Giúp tránh vi phạm các ràng buộc dữ liệu.
-d) Tự động tạo ra các báo cáo thống kê.
-```
-
-Câu hỏi này không tốt.
-Lựa chọn b rõ ràng cũng đúng.
-Đừng tạo ra tình huống mơ hồ, chẳng hạn có nhiều đáp án đúng.
-Hãy CHẮC CHẮN RẰNG có một đáp án đúng nhất và các đáp án còn lại arguably là sai.
