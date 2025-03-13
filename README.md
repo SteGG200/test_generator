@@ -67,7 +67,7 @@ c) [Option c]
 d) [Option d]
 ```
 
-A correct answer always begins with a asterisk (*). Each question is separated by a blank line.
+A correct answer always begins with a asterisk (*).
 
 About multi-line question or multi-line answer:
 
