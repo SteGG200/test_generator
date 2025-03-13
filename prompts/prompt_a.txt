@@ -1,23 +1,30 @@
 Giúp mình tạo một đề thi trắc nghiệm 30 câu về chủ đề Cơ sở dữ liệu cho học sinh Trung học Phổ thông.
-Hãy giữ nguyên định dạng như sau cho mỗi câu hỏi. (không có backticks `)
+
+Hãy giữ nguyên định dạng TOML như sau cho mỗi câu hỏi.
 
 ```
-[Số thứ tự câu]. [Nội dung câu hỏi]
-a) [Lựa chọn a]
-*b) [Lựa chọn b]
-c) [Lựa chọn c]
-d) [Lựa chọn d]
+[<Số thứ tự câu>]
+question = """\
+Đây là nội dung câu hỏi."""
+choices = [
+  """\
+    Đây là nội dung phương án A.""",
+  """\
+    Đây là nội dung phương án B.""",
+  """\
+    Đây là nội dung phương án C.""",
+  """\
+    Đây là nội dung phương án D."""
+]
+correct_index = 2 # Biểu thị đáp án đúng là C (các đáp án được đánh số từ 0 đến 3)
 ```
 
-Trong đó dấu * được đặt liền trước đáp án đúng (ở đây là b).
-Luôn có 1 và chỉ 1 đáp án đúng.
-
-Đừng in ra bất cứ thứ gì ngoài các câu hỏi theo mẫu trên.
-Mỗi câu hỏi ngăn cách nhau bởi một dòng trống.
-TUYỆT ĐỐI KHÔNG in ra thừa hay thiếu dấu cách!
+Hãy chỉ in ra các câu hỏi như trên!
+Đừng in ra backticks hay TOML format specification.
+Mỗi câu hỏi nên ngăn cách nhau bằng một dòng trống.
 
 Các phương án nên độc lập với nhau.
-Đừng đưa ra các phương án như "cả A và B đều đúng" hay "tất cả các phương án trên".một dòng trống.
+Đừng đưa ra các phương án như "cả A và B đều đúng" hay "tất cả các phương án trên".
 
 Bạn có thể tham khảo các mẫu câu hỏi sau, tuy nhiên hãy sáng tạo.
 

@@ -1,3 +1,5 @@
+[!WARNING] The documentation might be outdated!
+
 # Exam Generator Tool
 
 Exam Generator is a python tool for generating exam
@@ -152,4 +154,3 @@ handler:
 main # Entry point
 test
 ```
-
