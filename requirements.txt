@@ -1,6 +1,7 @@
+clize>=5.0.2
 openai>=1.63.0
 python-dotenv>=1.0.1
 python_docx>=1.1.2
+termcolor>=2.5.0
 text2qti>=0.7.1
 toml>=0.10.2
-termcolor>=2.5.0
