@@ -77,8 +77,8 @@ Dưới đây là nội dung kiến thức các bạn học sinh đã học.
         - BOOLEAN : kiểu logic, đúng (1), sai (0)
         - INT hoặc INTEGER: Số nguyên
         - REAL: Số thực dấu phẩy động
-        - DATE: ngày tháng, dạng 'YYYY-MM-DD'
-        - TIME: giờ phút, dạng 'HH-MM-SS'
+        - DATE: ngày tháng, dạng 'YYYY:MM:DD'
+        - TIME: giờ phút, dạng 'HH:MM:SS'
 
 - **Cập nhật và truy xuất CSDL**:
 
