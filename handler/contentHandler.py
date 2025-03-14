@@ -3,6 +3,7 @@ import os
 import dotenv
 import toml
 from openai import OpenAI
+from termcolor import colored
 from toml import TomlDecodeError
 
 dotenv.load_dotenv()
@@ -74,11 +75,16 @@ def get_prompt(prompt_dir: str):
 
 
 def toml_to_qti_compatible(content_toml: str):
-    content_dict = toml.loads(content_toml)
+    lines = content_toml.splitlines()
+    if lines[0] == "```toml" and lines[-1] == "```":
+        content_dict = toml.loads("\n".join(lines[1:-1]))
+    else:
+        content_dict = toml.loads(content_toml)
+
     content = ""
 
     def _get_indented_multiline_str(s: str):
-        lines = s.splitlines()
+        lines = [line.strip() for line in s.splitlines()]
         result = lines[0]
         for line in lines[1:]:
             result += f"\n    {line}"
@@ -118,18 +124,49 @@ def get_exam_content(path: str, prompt_dir: str):
             content_qti_compatible = toml_to_qti_compatible(content_toml)
             succeeded = True
         except TomlDecodeError as error_msg:
-            print(f"Lần chạy #{n_attempts} gặp lỗi:\n    {error_msg}")
             with open(f"{path}/content_failed_{n_attempts}.toml", "w+") as log:
                 log.write(content_toml)
                 log.close()
-            print("Đang thử lại...")
+            print(
+                colored("│   ├── ", "blue")
+                + colored(f"Lần chạy #{n_attempts} gặp lỗi:", "red")
+            )
+            print(
+                colored("│   │   ├── ", "blue")
+                + colored("Thông báo lỗi: ", "red")
+                + f"{error_msg}"
+            )
+            print(
+                colored("│   │   ├── ", "blue")
+                + colored(
+                    f"Xin hãy kiểm tra nội dung đề thi định dạng TOML AI-generated đã được tạo ở: {path}/content_failed_{n_attempts}.toml",
+                    "red",
+                )
+            )
+            print(
+                colored("│   │   └── ", "blue") + colored("Đang thử lại...", "yellow")
+            )
 
     with open(f"{path}/content.toml", "w+") as log:
         log.write(content_toml)
         log.close()
+    print(
+        colored("│   ├── ", "blue")
+        + colored(
+            f"Đã tạo nội dung đề thi định dạng TOML thành công: {path}/content.toml",
+            "green",
+        )
+    )
 
     with open(f"{path}/content.txt", "w+") as log:
         log.write(content_qti_compatible)
         log.close()
+    print(
+        colored("│   └── ", "blue")
+        + colored(
+            f"Đã tạo nội dung đề thi định dạng QTI-compatible thành công: {path}/content.txt",
+            "green",
+        )
+    )
 
     return content_qti_compatible

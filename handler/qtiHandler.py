@@ -1,6 +1,7 @@
 import text2qti.config
 import text2qti.qti
 import text2qti.quiz
+from termcolor import colored
 
 
 def convert_to_QTI(path: str, content: str):
@@ -12,4 +13,7 @@ def convert_to_QTI(path: str, content: str):
     )
     qti = text2qti.qti.QTI(quiz)
     qti.save(f"{path}/{filename}")
-    print(f"Đã tạo file zip QTI thành công: {path}/{filename}")
+    print(
+        colored("│   └── ", "blue")
+        + colored(f"Đã tạo file zip QTI thành công: {path}/{filename}", "green")
+    )

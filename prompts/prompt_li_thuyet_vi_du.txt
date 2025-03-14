@@ -1,8 +1,8 @@
-Giúp mình tạo một đề thi trắc nghiệm 30 câu về chủ đề Cơ sở dữ liệu cho học sinh Trung học Phổ thông.
+Giúp mình tạo một đề thi trắc nghiệm 25 câu về chủ đề Cơ sở dữ liệu cho học sinh Trung học Phổ thông.
 
 Hãy giữ nguyên định dạng TOML như sau cho mỗi câu hỏi.
 
-```toml
+```
 [<Số thứ tự câu>]
 question = """Đây là nội dung câu hỏi. \
 Có thể gồm nhiều dòng."""
@@ -27,18 +27,23 @@ Nhắc lại về format của TOML:
 
     - LUÔN LUÔN sử dụng dấu """ để bắt đầu và kết thúc string. Không phải " hay '.
 
-    - Dấu = (ngăn cách key và value) và dấu """ (đánh dấu bắt đầu một string) TUYỆT ĐỐI phải nằm trên cùng một hàng. Chẳng hạn câu hỏi dưới đây là SAI!
+    - TUYỆT ĐỐI KHÔNG in ra backticks hay TOML format specification (chẳng hạn ```toml ở đầu văn bản).
+      Hãy chỉ in ra các câu hỏi như trên, mỗi câu ngăn cách nhau bằng một dòng trống.
 
-    ```toml
+    - Dấu = (ngăn cách key và value) và dấu """ (đánh dấu bắt đầu một string) TUYỆT ĐỐI phải nằm trên cùng một hàng.
+      Chẳng hạn câu hỏi dưới đây là SAI!
+
+    ```
     question = # TUYỆT ĐỐI KHÔNG ĐƯỢC xuống dòng ở đây
     """
     Nội dung câu hỏi.
     """
     ```
 
-Hãy chỉ in ra các câu hỏi như trên!
-TUYỆT ĐỐI KHÔNG in ra backticks hay TOML format specification.
-Mỗi câu hỏi ngăn cách nhau bằng một dòng trống.
+Các phương án được đưa ra nên độc lập với nhau.
+Đừng đưa ra các phương án như "cả A và B đều đúng" hay "tất cả các phương án trên".
+
+Với TẤT CẢ câu hỏi, hãy tạo ra một bảng dữ liệu giả tưởng (sử dụng markdown format) và đặt câu hỏi về nó.
 
 Bạn có thể tham khảo các mẫu câu hỏi sau, tuy nhiên hãy sáng tạo.
 
@@ -48,7 +53,6 @@ Bạn có thể tham khảo các mẫu câu hỏi sau, tuy nhiên hãy sáng t�
 
     - "Đâu dưới đây là (hoặc không phải là) một trong số những (điều gì đó)?"
 
-    - Tự tạo ra một bảng dữ liệu giả tưởng và đặt câu hỏi về nó.
 
 Các yêu cầu về câu hỏi:
 
