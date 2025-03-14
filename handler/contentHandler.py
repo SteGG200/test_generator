@@ -115,22 +115,13 @@ def get_exam_content(path: str, shuffle: bool):
 
     content_dict = {}
 
-    prompt_dirs = sorted(Path("prompts").iterdir())
-    n_prompts = len(prompt_dirs)
+    for prompt_dir in sorted(Path("prompts").iterdir()):
+        prompt_name = prompt_dir.stem
 
-    for i, prompt_dir in enumerate(prompt_dirs):
-        prompt_name = prompt_dirs[i].stem
-
-        if i < n_prompts - 1:
-            print(
-                colored("│   ├── ", "blue")
-                + colored(f"Đang xử lí prompt {prompt_name}...", "yellow")
-            )
-        else:
-            print(
-                colored("│   └── ", "blue")
-                + colored(f"Đang xử lí prompt {prompt_name}...", "yellow")
-            )
+        print(
+            colored("│   ├── ", "blue")
+            + colored(f"Đang xử lí prompt {prompt_name}...", "yellow")
+        )
 
         content_curr_dict = {}
 
