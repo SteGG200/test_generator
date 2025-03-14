@@ -112,7 +112,8 @@ correct_index = 2 # Biểu thị đáp án đúng là C (các đáp án được
 
 There should be example prompts under `prompts` for reference.
 
-> [!NOTE] The rest of this subsection is deprecated since the QTI-compatible
+> [!NOTE]
+> The rest of this subsection is deprecated since the QTI-compatible
 > syntax has been covered by `contestHandler.py`.
 
 You must ensure that the `content.txt` file follows the format below (assuming
