@@ -1,11 +1,10 @@
-> [!WARNING]
-> The documentation might be outdated!
-
 # Exam Generator Tool
 
-Exam Generator is a python tool for generating exam
+Exam Generator is a python tool for generating exam.
 
-This tool uses API from [OpenRouter](https://openrouter.ai/)
+This tool uses API from [OpenRouter](https://openrouter.ai/).
+
+This fork has been tested on Linux.
 
 ## Table of Contents
 
@@ -15,60 +14,109 @@ This tool uses API from [OpenRouter](https://openrouter.ai/)
 
 ## Installation
 
-**Requirements tool**:
+### Python
 
-- python 3.8+
+Requires `python` 3.8+.
 
-You can optionally create a virtual environment for project by using
-`virtualenv` or `venv` before installation step.
-
-Installation dependencies:
+Install dependencies with the following command.
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Set environment variable `API_KEY` to your OpenRouter API key
+You can optionally create a virtual environment for project by using
+`virtualenv` or `venv` before installing dependencies.
 
-For Linux:
+[devenv](https://devenv.sh/) users can simply clone this repository then run
+`devenv shell` to drop into a virtual environment with the necessary
+dependencies.
+
+### OpenRouter API key
+
+Set environment variable `API_KEY` to your OpenRouter API key.
+
+- For Linux:
 
 ```bash
 export API_KEY=<OPENROUTER_API_KEY>
 ```
 
-For Windows Powershell:
+- For Windows Powershell:
 
 ```powershell
 $env:API_KEY=<OPENROUTER_API_KEY>
 ```
 
-Or you can also create a `.env` file and set variable
-`API_KEY=<OPENROUTER_API_KEY>`
+You can also create a `.env` file containing `API_KEY=<OPENROUTER_API_KEY>`.
 
 ## Basic usage
 
-To run the tool, use following command:
+Simply run `python main.py`. Find all options by running
+`python main.py --help`.
 
-```bash
-python main.py
+```
+$ python main.py --help
+Usage: main.py [OPTIONS]
+
+Generate a contest from prompts.
+
+Options:
+  --path=STR   Path to output. (default: )
+  --shuffle    Generated problems are shuffled, e.g. when there are multiple prompts.
+
+Other actions:
+  -h, --help   Show the help
 ```
 
-This is the output:
+Prompts should be put under the path `prompts`. Their output will be merged into
+one exam.
 
-```yaml
-dist/{promptName}_{timeCreated}:
-    - content.txt # Response from OpenRouter API
-    - qti.zip # QTI file for Canvas
-    - dethi.docx # Microsoft Word File
+The default output path is `dist/{datetimeCreated}`. The directory structure is
+as follows.
+
+```
+dist
+├── {datetime}:
+│   ├── logs
+│   │   ├── content_{name of prompt #1}_1.toml # Output of prompt #1 in TOML format.
+│   │   ├── content_{name of prompt #2}_1.toml # The first attempt at generating content from prompt #2 failed...
+│   │   ├── content_{name of prompt #2}_2.toml # ...but the second one succeeded.
+│   │   ├── content_{name of prompt #3}_1.toml
+│   │   └── ...
+│   ├── content.txt # Contest problems in QTI-compatible format.
+│   ├── dethi.docx # Contest problems in DOCX format.
+│   └── qti.zip # QTI file for Canvas.
+└── ...
 ```
 
 ## Customizing the prompt
 
-You can put prompts under the `prompts` directory. They will be processed
-sequentially.
+The prompt should print out problems in the following TOML format.
 
-However, you must ensure that the `content.txt` file follows the format below
-(assuming that option b is the correct answer):
+```toml
+[<Số thứ tự câu>]
+question = """Đây là nội dung câu hỏi. \
+Có thể gồm nhiều dòng."""
+choices = [
+  """Đây là nội dung phương án A. \
+    Có thể gồm nhiều dòng.""",
+  """Đây là nội dung phương án B. \
+    Có thể gồm nhiều dòng.""",
+  """Đây là nội dung phương án C. \
+    Có thể gồm nhiều dòng.""",
+  """Đây là nội dung phương án D. \
+    Có thể gồm nhiều dòng."""
+]
+correct_index = 2 # Biểu thị đáp án đúng là C (các đáp án được đánh số từ 0 đến 3)
+```
+
+There should be example prompts under `prompts` for reference.
+
+> [!NOTE] The rest of this subsection is deprecated since the QTI-compatible
+> syntax has been covered by `contestHandler.py`.
+
+You must ensure that the `content.txt` file follows the format below (assuming
+that option b is the correct answer):
 
 ```txt
 [Number]. [Question]
@@ -143,15 +191,4 @@ Use `//` or `/**/` syntax to comment in your prompt.
 This is also comment
 and isn't included.
 */
-```
-
-## Directory Structure
-
-```yaml
-handler:
-  - apiHandler # Handler prompting and returning responses from OpenRouter API
-  - convertHandler # Handler converting exam content to QTI file
-  - docxHandler # Handler generating file docx
-main # Entry point
-test
 ```

@@ -4,14 +4,14 @@ from datetime import datetime
 from clize import run
 from termcolor import colored
 
-from handler import convert_to_QTI, create_exam_document, get_exam_content
+from handlers import convert_to_QTI, create_exam_document, get_exam_content
 
 
 def main(*, path="", shuffle=False):
     """
     Generate a contest from prompts.
 
-    :param p,path: Path to output.
+    :param path: Path to output.
     :param shuffle: Generated problems are shuffled, e.g. when there are multiple prompts.
     """
 
