@@ -141,6 +141,7 @@ def get_exam_content(path: str, shuffle: bool):
             with open(
                 f"{path}/logs/content_{prompt_name}_{n_attempts}.toml",
                 "w+",
+                encoding="utf-8",
             ) as log:
                 log.write(content_curr_raw)
 
@@ -182,7 +183,7 @@ def get_exam_content(path: str, shuffle: bool):
             )
         )
 
-    with open(f"{path}/content.txt", "w+") as log:
+    with open(f"{path}/content.txt", "w+", encoding="utf-8") as log:
         log.write(dict_to_qti_compatible(content_dict, shuffle))
 
     print(
@@ -193,5 +194,5 @@ def get_exam_content(path: str, shuffle: bool):
         )
     )
 
-    with open(f"{path}/content.txt", "r") as log:
+    with open(f"{path}/content.txt", "r", encoding="utf-8") as log:
         return log.read()
