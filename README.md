@@ -4,8 +4,6 @@ Exam Generator is a python tool for generating exam.
 
 This tool uses API from [OpenRouter](https://openrouter.ai/).
 
-This fork has been tested on Linux.
-
 ## Table of Contents
 
 - [Installation](#installation)
