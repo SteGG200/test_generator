@@ -16,62 +16,64 @@ MODEL = "google/gemini-2.0-pro-exp-02-05:free"
 
 
 def get_prompt(prompt_dir: str):
-    # Read prompt content from file at prompt_dir
-    prompt_file = open(prompt_dir, "r")
-    prompt_content = prompt_file.read()
+    with open(prompt_dir, "r", encoding="utf-8") as prompt_file:
+        # Read prompt content from file at prompt_dir
+        prompt_content = prompt_file.read()
 
-    # Remove comments from prompt content
-    stack_comment_symbols = []
-    buffer_comment_symbols = ""
-    parsed_prompt_content = ""
-    for index, char in enumerate(prompt_content):
-        if len(stack_comment_symbols) > 0:
-            if stack_comment_symbols[-1] == "//":
-                if char == "\n":
-                    parsed_prompt_content += "\n"
-                    stack_comment_symbols.pop()
-                continue
-            elif stack_comment_symbols[-1] == "/*":
-                if char == "/" and index - 1 >= 0 and prompt_content[index - 1] == "*":
-                    stack_comment_symbols.pop()
-                continue
+        # Remove comments from prompt content
+        stack_comment_symbols = []
+        buffer_comment_symbols = ""
+        parsed_prompt_content = ""
+        for index, char in enumerate(prompt_content):
+            if len(stack_comment_symbols) > 0:
+                if stack_comment_symbols[-1] == "//":
+                    if char == "\n":
+                        parsed_prompt_content += "\n"
+                        stack_comment_symbols.pop()
+                    continue
+                elif stack_comment_symbols[-1] == "/*":
+                    if (
+                        char == "/"
+                        and index - 1 >= 0
+                        and prompt_content[index - 1] == "*"
+                    ):
+                        stack_comment_symbols.pop()
+                    continue
+                else:
+                    raise SyntaxError(
+                        f"Invalid comment syntax: {stack_comment_symbols[-1]}"
+                    )
+            if char == "/":
+                if buffer_comment_symbols == "/":
+                    stack_comment_symbols.append("//")
+                    buffer_comment_symbols = ""
+                elif buffer_comment_symbols == "":
+                    buffer_comment_symbols = "/"
+                else:
+                    raise BufferError(
+                        f"Invalid comment syntax in buffer: {buffer_comment_symbols}"
+                    )
+            elif char == "*":
+                if buffer_comment_symbols == "/":
+                    stack_comment_symbols.append("/*")
+                    buffer_comment_symbols = ""
+                elif buffer_comment_symbols == "":
+                    parsed_prompt_content += char
+                else:
+                    raise BufferError(
+                        f"Invalid comment syntax in buffer: {buffer_comment_symbols}"
+                    )
             else:
-                raise SyntaxError(
-                    f"Invalid comment syntax: {stack_comment_symbols[-1]}"
-                )
-        if char == "/":
-            if buffer_comment_symbols == "/":
-                stack_comment_symbols.append("//")
-                buffer_comment_symbols = ""
-            elif buffer_comment_symbols == "":
-                buffer_comment_symbols = "/"
-            else:
-                raise BufferError(
-                    f"Invalid comment syntax in buffer: {buffer_comment_symbols}"
-                )
-        elif char == "*":
-            if buffer_comment_symbols == "/":
-                stack_comment_symbols.append("/*")
-                buffer_comment_symbols = ""
-            elif buffer_comment_symbols == "":
-                parsed_prompt_content += char
-            else:
-                raise BufferError(
-                    f"Invalid comment syntax in buffer: {buffer_comment_symbols}"
-                )
-        else:
-            if buffer_comment_symbols == "/":
-                parsed_prompt_content += buffer_comment_symbols
-                parsed_prompt_content += char
-                buffer_comment_symbols = ""
-            elif buffer_comment_symbols == "":
-                parsed_prompt_content += char
-            else:
-                raise BufferError(
-                    f"Invalid comment syntax in buffer: {buffer_comment_symbols}"
-                )
-
-    prompt_file.close()
+                if buffer_comment_symbols == "/":
+                    parsed_prompt_content += buffer_comment_symbols
+                    parsed_prompt_content += char
+                    buffer_comment_symbols = ""
+                elif buffer_comment_symbols == "":
+                    parsed_prompt_content += char
+                else:
+                    raise BufferError(
+                        f"Invalid comment syntax in buffer: {buffer_comment_symbols}"
+                    )
 
     return parsed_prompt_content
 
@@ -141,6 +143,7 @@ def get_exam_content(path: str, shuffle: bool):
             with open(
                 f"{path}/logs/content_{prompt_name}_{n_attempts}.toml",
                 "w+",
+                encoding="utf-8",
             ) as log:
                 log.write(content_curr_raw)
 
@@ -182,7 +185,7 @@ def get_exam_content(path: str, shuffle: bool):
             )
         )
 
-    with open(f"{path}/content.txt", "w+") as log:
+    with open(f"{path}/content.txt", "w+", encoding="utf-8") as log:
         log.write(dict_to_qti_compatible(content_dict, shuffle))
 
     print(
@@ -193,5 +196,5 @@ def get_exam_content(path: str, shuffle: bool):
         )
     )
 
-    with open(f"{path}/content.txt", "r") as log:
+    with open(f"{path}/content.txt", "r", encoding="utf-8") as log:
         return log.read()
