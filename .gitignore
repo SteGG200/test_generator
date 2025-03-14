@@ -4,3 +4,4 @@ dist/
 script.bash
 .env
 test.py
+prompt.txt

@@ -14,7 +14,10 @@ if MODEL is None:
 
 def get_prompt():
 	# Read prompt content from file prompt.txt
-	prompt_file = open('prompt.txt', 'r', encoding='utf-8')
+	if os.path.isfile('prompt.txt'):
+		prompt_file = open('prompt.txt', 'r', encoding='utf-8')
+	else:
+		prompt_file = open('prompt.example.txt', 'r', encoding='utf-8')
 	prompt_content = prompt_file.read()
 
 	# Remove comments from prompt content

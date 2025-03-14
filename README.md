@@ -55,9 +55,9 @@ dist/{timeCreated}:
 
 ## Customizing the prompt
 
-You can modify default prompt in `prompt.txt` file to change the output content to whatever you want. 
+The tool will use the prompt saved in `prompt.txt` file to send to model API. If `prompt.txt` doesn't exist, the default prompt from `prompt.example.txt` file will be used instead.
 
-However, you must ensure that the `content.txt` file follows the format below (assuming that option b is the correct answer):
+However, you must ensure that the `content.txt` file, which is the response from model API, follows the format below (assuming that option b is the correct answer):
 
 ```txt
 [Number]. [Question]
