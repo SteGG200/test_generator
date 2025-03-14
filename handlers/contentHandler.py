@@ -166,7 +166,7 @@ def get_exam_content(path: str, shuffle: bool):
                         "Xin hãy kiểm tra nội dung đề thi định dạng TOML AI-generated đã được tạo ở: ",
                         "red",
                     )
-                    + f"{path}/logs_failed/content_{prompt_name}_{n_attempts}.toml",
+                    + f"{path}/logs/content_{prompt_name}_{n_attempts}.toml",
                 )
                 print(
                     colored("│   │   │   └── ", "blue")
