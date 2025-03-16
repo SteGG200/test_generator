@@ -5,16 +5,19 @@ Exam Generator is a python tool for generating exam
 This tool uses API from [OpenRouter](https://openrouter.ai/)
 
 ## Table of Contents
+
 - [Installation](#installation)
 - [Basic usage](#basic-usage)
 - [Customizing the prompt](#customizing-the-prompt)
 
 ## Installation
 
-**Requirements tool**: 
+**Requirements tool**:
+
 - python 3.8+
 
 For Unix systems:
+
 ```bash
 python -m venv venv
 source ./venv/bin/activate
@@ -22,6 +25,7 @@ pip install -r requirements.txt
 ```
 
 For Windows Powershell:
+
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
@@ -29,23 +33,27 @@ pip install -r requirements.txt
 ```
 
 Then, create a file `.env` at the root of the project and set variables like this:
+
 ```env
 API_KEY='<YOUR_OPENROUTER_API_KEY>'
 MODEL='<OPENROUTER_MODEL>'
 ```
 
-**Note**: 
+**Note**:
+
 - `API_KEY` is required, `MODEL` is optional.
 - If you don't set the `MODEL` variable, the tool will automatically use the `google/gemini-2.0-pro-exp-02-05:free` model.
 
 ## Basic usage
 
 To run the tool, use following command:
+
 ```bash
 python main.py
 ```
 
 It generates the following output files inside folder `dist/{timeCreated}/`:
+
 ```yaml
 dist/{timeCreated}:
   - content.txt # Response from OpenRouter API
@@ -67,14 +75,14 @@ c) [Option c]
 d) [Option d]
 ```
 
-A correct answer always begins with a asterisk (*).
+A correct answer always begins with a asterisk (\*).
 
 About multi-line question or multi-line answer:
 
 ```txt
 |
 | /* Indentation:
-| Question or answer that oppucies more than 1 line 
+| Question or answer that oppucies more than 1 line
 | must have at least this indentation*/
 | |
 1. [Question]
@@ -92,7 +100,7 @@ a) [Possible answer]
 
 For example:
 
-```txt
+````txt
 1. Thuộc tính CSS nào được sử dụng để thay đổi màu chữ của một phần tử?
 a) `font-color`
 *b) `color`
@@ -100,22 +108,22 @@ c) `text-color`
 d) `foreground-color`
 
 2. Đoạn mã:
-	```
-	<ol type="A" start="3">
-		<li>Item 1</li>
-		<li>Item 2</li>
-	</ol>
-	```
+  ```
+  <ol type="A" start="3">
+    <li>Item 1</li>
+    <li>Item 2</li>
+  </ol>
+  ```
 	Kết quả hiển thị sẽ như thế nào?
 a) 1. Item 1
-	2. Item 2
+  2. Item 2
 b) A. Item 1
-	B. Item 2
+  B. Item 2
 *c) C. Item 1
-	D. Item 2
+  D. Item 2
 d) 3. Item 1
-	4. Item 2
-```
+  4. Item 2
+````
 
 **Note**: code block like HTML tags should be put in backticks to ensure QTI output is correct.
 
@@ -127,7 +135,7 @@ Use `//` or `/**/` syntax to comment in your prompt.
 // This line isn't included in the prompt
 
 /*
-This is also comment 
+This is also comment
 and isn't included.
 */
 ```
