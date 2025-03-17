@@ -1,0 +1,62 @@
+Hãy tạo một bộ đề 30 câu hỏi bằng tiếng việt về đạo đức trong tin học với những ví dụ dưới đây:
+ 
+- Tạo tình huống theo các bước sau:
+1) Viết nhiều tình huống như viết các truyện ngắn với mỗi câu hỏi trong tối thiểu 3 câu và tối đa 4 câu. Mỗi câu hỏi sử dụng ít nhất 40 token.
+2) Lồng kiến thức bên dưới vào các câu hỏi.
+ 
+1. Bạn A kết bạn với một người bạn tên B trên diễn đàn chia sẻ chung về sở thích du lịch. Bạn B được giới thiệu là người bản xứ ở khu vực X, am hiểu về nơi mình sinh ra và lớn lên.
+   Bạn B thường đăng tải các video ngắn về những địa điểm du lịch và các kinh nghiệm du lịch hữu ích. Bạn B được rất nhiều người quan tâm và theo dõi trên mạng.
+   Thực tế, bạn B không phải là người bản xứ mà là sinh viên đại học. Ngành học của bạn có liên quan đến truyền thông, việc xây dựng được kênh truyền thông có nhiều người theo dõi là một trong những yêu cầu của ngành học.
+   Tình huống trên thể hiện nhược điểm nào dưới dây của giao tiếp trong không gian mạng?
+a) Thiếu bảo mật
+*b) Thiếu tin cậy
+c) Thiếu liên tục
+d) Mở rộng khả năng tương tác
+ 
+2. An và Bình là đôi bạn thân từ hồi cấp hai. Hiện tại, cả hai đang học khác trường cấp ba nhưng vẫn thường xuyên giữ liên lạc với nhau qua mạng xã hội. Một hôm, An chia sẻ với Bình về việc mình đang cảm thấy rất áp lực vì kỳ thi sắp tới, đồng thời cũng than thở về một số mâu thuẫn nhỏ với bố mẹ. Bình đã chụp lại màn hình đoạn hội thoại đó và gửi cho một vài người bạn khác trong nhóm chat chung, kèm theo những lời bình luận không hay về An. Hành động của Bình thể hiện điều gì sau đây?
+a) Sự thiếu đồng cảm và tôn trọng quyền riêng tư của người khác.
+b) Sự quan tâm và mong muốn chia sẻ, giúp đỡ bạn bè trong lúc khó khăn.
+*c) Sự thiếu tôn trọng quyền riêng tư và gây tổn thương cho người khác trên không gian mạng.
+d) Sự nhiệt tình trong việc kết nối và giao tiếp với bạn bè qua mạng xã hội.
+ 
+3. Trong một cuộc tranh luận trên mạng xã hội về phương pháp học tập hiệu quả, bạn Nam đã sử dụng những từ ngữ thô tục, mang tính xúc phạm đến những người có quan điểm trái ngược với mình. Nam còn liên tục đăng tải những bình luận khiêu khích, gây mất trật tự trong bài viết. Hậu quả của hành vi này là gì?
+a) Tạo ra môi trường trao đổi kiến thức và kinh nghiệm lành mạnh, bổ ích.
+*b) Gây mất hòa khí, tạo ra mâu thuẫn, xung đột trong một cộng đồng.
+c) Khuyến khích mọi người tham gia đóng góp ý kiến, xây dựng nội dung.
+d) Thể hiện sự tự tin, bảo vệ quan điểm cá nhân một cách mạnh mẽ.
+ 
+ 
+ 
+Note: the answer has the star is the correct answer.
+ 
+ 
+Requirements:
+- Không đưa bất kì văn bản nào khác ngoài nội dung câu hỏi và câu trả lời
+- Đáp án đúng được phân bố ngẫu nhiên
+- Mọi câu hỏi đều có bối cảnh và nội dung khác nhau
+- Câu hỏi và câu trả lời không bị lặp từ 
+- Độ dài các câu trả lời trong cùng 1 câu hỏi cách nhau tối đa 2 từ
+- Mọi câu hỏi có tình huống cụ thể và có tối đa 2 nhân vật
+- Các câu hỏi có bối cảnh sáng tạo gần gũi với học sinh cấp 3
+- Tối thiểu 10 câu có chữ "không" trong đề bài
+- Tất cả các câu hỏi đều có từ "nào sau đây" hoặc "phương án nào sau đây" trong đề bài
+- Tối thiểu 5 câu hỏi về đặc điểm của giao tiếp qua không gian mạng
+- Tối thiểu 5 câu hỏi về tính nhân văn
+- Nội dung các câu hỏi và tình huống bao gồm những kiến thức dưới đây:
+  Hệ quả khi chia sẻ tin qua Internet
+  Ưu điểm của giao tiếp qua không gian mạng: không phụ thuộc vào thời gian và địa điểm, có thể xảy ra mọi lúc, mọi nơi; cho phép một số lượng lớn người cùng tham gia một lúc; thuận lợi cho việc lưu trữ thông tin; xóa bỏ mặc cảm, giảm nhẹ các rào cản ở bước đầu giao tiếp; cung cấp một nền tảng giúp những người khiếm khuyết ngoại hình, khiếm thính hoặc khiếm ngôn dễ dàng giao tiếp mà không phải có người hỗ trợ
+  Nhược điểm của giao tiếp qua không gian mạng: có thể xảy ra hiểu lầm vì diễn giải sai ý nghĩa của lời văn, âm điệu của tiếng nói; kĩ năng viết kém (lỗi chính tả, sai ngữ pháp, sử dụng viết tắt tùy tiện); lười biếng; nghiện Internet, dành quá nhiều thời gian cho không gian mạng gây ra sự ngây ngô trong cuộc sống thực, không biết gì về những sự kiện gần gũi; lộ, mất thông tin cá nhân, mất kết nối
+  Tính nhân văn trên không gian mạng
+ 
+ 
+ 
+Each question's format (for example Option 2 is the correct answer):
+X. [Question]
+a) [Option 1]
+*b) [Option 2]
+c) [Option 3]
+d) [Option 4]
+ 
+- Add a asterisk symbol before correct answer.
+- No indentation in the question format.
+- Each question must be separated by a blank line.

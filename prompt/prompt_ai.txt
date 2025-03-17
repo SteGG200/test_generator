@@ -1,0 +1,39 @@
+Tạo một đề trắc nghiệm 30 câu hỏi tình huống về trí tuệ nhân tạo cho học sinh cấp 3 Việt Nam có sử dụng các câu hỏi mẫu dưới đây làm ví dụ và các câu hỏi tuân theo yêu cầu bên dưới :
+
+Câu hỏi mẫu:
+
+1. Phương án nào dưới đây nêu đúng về khả năng học của AI
+*a) 
+b) Vì giá quá rẻ, bạn nên chấp nhận rủi ro và chuyển khoản đặt cọc để không bỏ lỡ cơ hội.
+c) Nhắn tin hỏi thêm thông tin sản phẩm nhưng cứ đặt cọc một khoản nhỏ để thử vận may.
+d) Chuyển khoản ngay và chờ nhận hàng, nếu không nhận được hàng thì tìm cách báo cáo sau.
+
+2. Bạn A đọc được một bài viết về bạn B trong lớp. Bạn A rất thích thú với nội dung này. Bạn A đã kiểm tra tính chính xác của thông tin, đảm bảo thông tin không có sai. Sau đó chia sẻ bài viết với mọi người để giúp bạn B được nhiều người biết tới. Trong tình huống trên, tình nhân văn thể hiện ở biểu hiện nào sau đây?
+a) Bạn A đã chia sẻ cảm xúc tích cực của bản thân.
+b) Bạn A đã kiểm chứng đảm bảo thông tin đúng sự thật trước khi đăng tải.
+c) Bạn A chia sẻ bài viết giúp bạn B được nhiều người biết đến hơn.
+*d) Bạn A đã kiểm chứng các thông tin, đảm bảo thông tin không bị cấm trước khi đăng tải.
+
+Lựa chọn có dấu * phía trước là lựa chọn đúng
+
+
+Requirements:
+- No other text but question content should be included
+- Options should not give away the answers too easily either by the options' lengths or the options' content
+- Options should be similar to each other in terms of lengths and content but there must always be only one truest option
+- Add a asterisk symbol before correct answer
+- Each answer must be different from others.
+- Correct answers should be randomly distributed
+- Correct answers should not always be the longest answer
+- Each questions must have different structures which can range from what's the best course of action, who is right, which course of action is more ethical, ...
+- No indentation in the question format.
+- Each question must be separated by a blank line.
+- Must generate text exactly from below format, not markdown or HTML:
+
+Each question's format (for example Option 2 is the correct answer):
+X. [Question]
+a) [Option 1]
+*b) [Option 2]
+c) [Option 3]
+d) [Option 4]
+

@@ -1,0 +1,81 @@
+Hãy tạo một bộ đề 50 câu hỏi bằng tiếng việt về đạo đức trong tin học với những ví dụ dưới đây:
+
+1. Theo quyết định số QĐ 874/QĐ-BTTT ngày 17 tháng 6 năm 2021, Văn bản nào dưới đây được Bộ Thông tin và truyền thông đã ban hành có liên quan đến trao đổi thông tin trong không gian mạng?
+a) Bộ luật về an ninh mạng.
+b) Bộ quy tắc giao tiếp trên không gian mạng.
+*c) Bộ quy tắc ứng xử trên mạng xã hội.
+d) Bộ quy tắc đảm bảo an ninh mạng.
+
+2. Văn bản nào sau đây được Quốc hội khóa XI thông qua và ban hành lần đầu vào năm 2005?
+a) Luật Công nghệ Thông tin
+*b) Luật Giao dịch điện tử
+c) Luật An ninh mạng
+d) Luật Hình sự
+
+3. Luật an ninh mạng quy định KHÔNG cấm sử dụng không gian mạng để thực hiện hành vi nào sau đây?
+a) Phân biệt đối xử về giới.
+b) Xuyên tạc lịch sử, phủ nhận thành tựu cách mạng, phá hoại khối đại đoàn kết toàn dân tộc.
+d) Mua bán người.
+*d) Tìm người thân bị mua bán, mất tích.
+
+4. Trong các hành vi sau, hành vi nào thuộc phạm vi xử phạt theo Nghị định 15/2020/NĐ-CP?
+a) Trích dẫn nguồn chính thống về an ninh, quốc phòng.
+*b) Mô tả tỉ mỉ, rùng rợn hành động chém, giết, tai nạn, kích động bạo lực.
+c) Đăng thông tin về phong tục tập quán truyền thống đã được công nhận.
+d) Phản biện khoa học dựa trên bằng chứng rõ ràng.
+
+5. Theo Nghị định 15/2020/NĐ-CP, người dùng mạng xã hội có thể bị xử phạt khi thực hiện hành vi nào sau đây?
+*a) Cung cấp thông tin mê tín dị đoan, bói toán, hoặc tội phạm chi tiết.
+b) Chia sẻ đường dẫn đến các nội dung hợp pháp, có ích cho cộng đồng.
+c) Truyền tải thông tin từ các nguồn đã được kiểm chứng.
+d) Không có hành vi nào trong các hành vi được liệt kê ở trên bị phạt.
+
+
+Note: the answer has the star is the correct answer.
+
+
+Requirements:
+- Không đưa bất kì văn bản nào khác ngoài nội dung câu hỏi và câu trả lời
+- Các câu hỏi chỉ bao gồm 1 câu có độ dài tối thiểu 15 từ
+- Mỗi câu hỏi và phương án của câu hỏi đấy nhắc đến tối đa 2 điều luật
+- Các phương án không bắt đầu bằng cụm từ giống nhau
+- Đáp án đúng được phân bố ngẫu nhiên
+- Mọi câu hỏi đều có nội dung khác nhau
+- Câu hỏi và câu trả lời không bị lặp từ 
+- Tối thiểu 15 câu có câu trả lời đúng không phải là phương án dài nhất của câu hỏi đó
+- Tối thiểu 10 câu có chữ "không" trong đề bài
+- Tất cả các câu hỏi phải có cụm từ "nào sau đây" trong đề bài
+- Không xuất hiện đáp án "cả 3 đáp án đều đúng" hay "không có đáp án nào đúng"
+- Các câu hỏi chỉ được đề cập đến các điều luật và những điều bị cấm
+- Các phương án trả lời không được chứa điều luật, điều khoản và nghị định trong Tin học
+- Mỗi câu hỏi chỉ được hỏi về pháp luật hoặc điều khoản hoặc nghị định trong Tin học
+- Tối thiểu 10 câu hỏi về các hành vi vi phạm hay bị cấm
+- Mỗi phương án trong các câu hỏi hành vi phải gồm tối thiểu 2 hành vi khác nhau 
+- Nội dung các câu hỏi bao gồm những kiến thức dưới đây: 
+  17/6/2021: Bộ Quy tắc ứng xử trên mạng xã hội (Bộ TT&TT) 
+  2005: Luật Giao dịch điện tử 
+  2006: Luật Công nghệ Thông tin 
+  2018: Luật An ninh mạng 
+  2017: Luật Hình sự
+  25/6/2019: Luật sở hữu trí tuệ
+  13/8/2008: Nghị định 90/2008/NĐ-CP về chống thư rác
+  15/7/2013: Nghị định 72/2013/NĐ-CP về quản lí, cung cấp và sử dụng dịch vụ Internet
+  Nghị định 15/2020/NĐ-CP quy định xử phạt vi phạm hành chính trong lĩnh vực bưu chính, viễn thông, tần số vô tuyến điện, CNTT và giao dịch điện tử.
+  Điều 12 khoản 2 Luật Công nghệ Thông tin nghiêm cấm "cung cấp, trao đổi, truyền đưa, lưu trữ, sử dụng thông tin số” nhằm: chống phá nhà nước; kích động bạo lực; phá hoại thuần phong mĩ tục; tiết lộ bí mạt quốc gia; xúc phạm uy tín của tổ chức và công dân; tuyên truyền hàng hóa, dịch vụ bị cấm
+  Điều 8 khoản 1 Luật An ninh mạng cấm sử dụng không gian mạng để: xuyên tạc lịch sử, phủ nhận thành tựu cách mạng, phá hoại khối đại đoàn kết dân tộc, phân biệt tôn giáo, đối xử về giới và chủng tộc; chống phá Nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam; gây thiệt hại cho kinh tế - xã hội, khó khăn cho hoạt động của nhà nước; xâm phạm quyền và lợi ích hợp pháp của cơ quan, tổ chức, cá nhân khác; thông tin sai sự thật; xúi giục người khác phạm tội; tổ chức mại dâm, mua bán người, phá hoại thuần phong mĩ tục của cộng đồng.
+  Điều 101 khoản 1 Nghị định 15/2020/NĐ-CP đưa ra các hành vi vi phạm pháp luật khi cung cấp, chia sẻ: thông tin giả mạo, sai sự thật; thông tin cổ súy hủ tục, mê tín dị đoan, trái thuần phong mĩ tục; thông tin miêu tả tỉ mỉ hành động kinh dị, rung rợn; thông tin bịa đặt nhằm gây kích động trong quần chúng; các tác phẩm xuất bản mà bị cấm lưu hành, tịch thu hay chưa có sự đồng ý của chủ thể quyền sở hữu trí tuệ; hàng hóa, dịch vụ, đường đẫn, bản đồ bị cấm.
+
+  
+
+
+Each question's format (for example Option 2 is the correct answer):
+X. [Question]
+a) [Option 1]
+*b) [Option 2]
+c) [Option 3]
+d) [Option 4]
+
+- Add a asterisk symbol before correct answer.
+- No indentation in the format. 
+- Each option ends with a period.
+- Each question must be separated by a blank line.

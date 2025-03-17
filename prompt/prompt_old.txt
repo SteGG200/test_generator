@@ -1,0 +1,29 @@
+Generate a 50-question HTML exam in Vietnamese with one example:
+
+1. Phương án nào sau đây nêu đúng cú pháp khai báo CSS ngoài (ngoại tuyến) trong một đoạn mã HTML?
+a) `<link href="tentep.css" rel="stylesheet">`
+b) `<style link="tentep.css" rel="stylesheet">`
+c) `<css link="tentep.css" rel="stylesheet">`
+*d) `<link src="tentep.css" rel="stylesheet">`
+
+Note: the answer has the star is the correct answer.
+
+Requirements:
+- No other text but question content should be included
+- Each question and choice must be put correctly in one line
+- Questions about HTML tags
+- Questions should have at least 5 questions about iframe
+- Correct answers should be randomly distributed
+- Each answer must be different from others.
+- Add a asterisk symbol before correct answer.
+- Every code block (HTML tag, CSS code) must be put in backticks.
+- No indentation in the question format.
+- Each question must be separated by a blank line.
+- Must generate text exactly from below format, not markdown or HTML:
+
+Each question's format (for example Option 2 is the correct answer):
+X. [Question]
+a) [Option 1]
+*b) [Option 2]
+c) [Option 3]
+d) [Option 4]

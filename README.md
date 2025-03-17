@@ -1,51 +1,45 @@
 # Exam Generator Tool
 
-Exam Generator is a python tool for generating exam
+Exam Generator is a python tool for generating exam about HTML and CSS
 
 This tool uses API from [OpenRouter](https://openrouter.ai/)
 
-## Table of Contents
-- [Installation](#installation)
-- [Basic usage](#basic-usage)
-- [Customizing the prompt](#customizing-the-prompt)
+[Installation](#installation) | [Usage](#usage)
 
 ## Installation
 
 **Requirements tool**: 
 - python 3.8+
 
-For Unix systems:
+Optionally, you can create a virtual environment for project by using `virtualenv` or `venv` before installation step.
+
+Installation dependencies:
 ```bash
-python -m venv venv
-source ./venv/bin/activate
 pip install -r requirements.txt
+```
+
+Set environment variable `API_KEY` to your OpenRouter API key
+
+For Linux:
+```bash
+export API_KEY=<OPENROUTER_API_KEY>
 ```
 
 For Windows Powershell:
 ```powershell
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+$env:API_KEY=<OPENROUTER_API_KEY>w
 ```
 
-Then, create a file `.env` at the root of the project and set variables like this:
-```env
-API_KEY='<YOUR_OPENROUTER_API_KEY>'
-MODEL='<OPENROUTER_MODEL>'
-```
+Or you can also create a `.env` file and set variable `API_KEY=<OPENROUTER_API_KEY>`
 
-**Note**: 
-- `API_KEY` is required, `MODEL` is optional.
-- If you don't set the `MODEL` variable, the tool will automatically use the `google/gemini-2.0-pro-exp-02-05:free` model.
-
-## Basic usage
+## Usage
 
 To run the tool, use following command:
 ```bash
 python main.py
 ```
 
-It generates the following output files inside folder `dist/{timeCreated}/`:
+Output:
 ```yaml
 dist/{timeCreated}:
   - content.txt # Response from OpenRouter API
@@ -53,84 +47,7 @@ dist/{timeCreated}:
   - dethi.docx # Microsoft Word File
 ```
 
-## Customizing the prompt
-
-The tool will use the prompt saved in `prompt.txt` file to send to model API. If `prompt.txt` doesn't exist, the default prompt from `prompt.example.txt` file will be used instead.
-
-However, you must ensure that the `content.txt` file, which is the response from model API, follows the format below (assuming that option b is the correct answer):
-
-```txt
-[Number]. [Question]
-a) [Option a]
-*b) [Option b]
-c) [Option c]
-d) [Option d]
-```
-
-A correct answer always begins with a asterisk (*).
-
-About multi-line question or multi-line answer:
-
-```txt
-|
-| /* Indentation:
-| Question or answer that oppucies more than 1 line 
-| must have at least this indentation*/
-| |
-1. [Question]
-| |
-| [Question continued, so indentation]
-| |
-a) [Possible answer]
-| |
-| [Possible answer continued, so indentation]
-| |
-*b) [Correct answer]
-|
-...
-```
-
-For example:
-
-```txt
-1. Thuộc tính CSS nào được sử dụng để thay đổi màu chữ của một phần tử?
-a) `font-color`
-*b) `color`
-c) `text-color`
-d) `foreground-color`
-
-2. Đoạn mã:
-	```
-	<ol type="A" start="3">
-		<li>Item 1</li>
-		<li>Item 2</li>
-	</ol>
-	```
-	Kết quả hiển thị sẽ như thế nào?
-a) 1. Item 1
-	2. Item 2
-b) A. Item 1
-	B. Item 2
-*c) C. Item 1
-	D. Item 2
-d) 3. Item 1
-	4. Item 2
-```
-
-**Note**: code block like HTML tags should be put in backticks to ensure QTI output is correct.
-
-### Comment in prompt:
-
-Use `//` or `/**/` syntax to comment in your prompt.
-
-```txt
-// This line isn't included in the prompt
-
-/*
-This is also comment 
-and isn't included.
-*/
-```
+Additionally, you can modify default prompt in `prompt.txt` file to change the output format to whatever you want.
 
 ## Directory Structure
 
