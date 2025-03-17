@@ -1,0 +1,311 @@
+Phần 1(Cơ sở mạng máy tính):
+Tạo một đề trắc nghiệm 50 câu hỏi tình huống về thiết lập kết nối và sử dụng mạng có sử dụng các câu hỏi mẫu dưới đây làm ví dụ và các câu hỏi tuân theo yêu cầu bên dưới :
+ 
+Cách tạo tình huống:
+1) Viết nhiều tình huống như viết các truyện ngắn tối đa 4 câu và tối thiểu 3 câu với mỗi câu hỏi. Mỗi câu hỏi sử dụng ít nhất 10 tokens.
+2) Lồng kiến thức bên dưới vào câu hỏi
+3) Đảm bảo câu hỏi có nét riêng so với những câu hỏi trước về mặt cấu trúc và nội dung
+4) Kiểm tra xem câu hỏi có phù hợp với điều kiện trong bước 1,2 và 3 không. Nếu không, lặp lại bước 1, 2 và 3
+ 
+Scope of Knowledge:
+Nhiệm vụ 1: Kết nối máy tính với Access Point:
+Bước 1. Xác định và nhập mật khẩu mạng Wi-Fi.
+Bước 2. Trên Windows 10, chọn tên mạng Wi-Fi, nhập mật khẩu và hoàn tất kết nối.
+Bước 3. Kiểm tra địa chỉ IP và xem chi tiết kết nối mạng.
+Bước 4. Mở trình duyệt web để kiểm tra kết nối.
+Nhiệm vụ 2: Kết nối máy tính với Switch:
+Bước 1. Chuẩn bị dây cáp mạng RJ45.
+Bước 2. Cắm dây vào cổng LAN trên máy tính và Switch.
+Bước 3. Quan sát đèn báo hiệu trên cổng để xác nhận kết nối vật lý thành công.
+Bước 4. Kiểm tra kết nối mạng bằng cách mở trình duyệt web.
+Nhiệm vụ 3. Kết nối thiết bị thông minh vào mạng máy tính
+Để kết nối điện thoại thông minh tới Access Point:
+- Cách 1: Truy cập Cài đặt > Kết nối > Wi-Fi, bật Wi-Fi, chọn mạng cần kết nối, nhập mật khẩu và kết nối.
+- Cách 2: Bật dịch vụ mạng di động trong Cài đặt > Kết nối > Sử dụng dữ liệu, sau đó bật Dữ liệu di động.
+Sau khi kết nối, kiểm tra kết nối bằng cách mở trình duyệt và truy cập vào trang web bất kì để xác nhận.
+Trong phòng thực hành Tin học (PC-A và PC-B):
+- Cả hai máy tính đều kết nối vào cùng một mạng LAN.
+- Đều chạy hệ điều hành Windows 10 và lưu trữ tài liệu học tập trong ổ D.
+- PC-A được kết nối với một máy in qua cổng USB.
+Nhiệm vụ 4: Để chia sẻ dữ liệu từ máy tính PC-A trên cùng mạng LAN:
+PC-A (Máy chủ chia sẻ):
+Bước 1: Nháy chuột phải vào ổ cứng chứa dữ liệu (ví dụ ổ D), chọn Properties.
+Bước 2: Chọn tab Sharing, sau đó chọn Advanced Sharing.
+Bước 3: Trên hộp thoại Advanced Sharing, tích vào ô Share this folder và chọn Permissions.
+Bước 4: Trên hộp thoại Permissions for D, chọn Everyone và tích vào Full Control, Change, Read, sau đó chọn OK để hoàn thành.
+PC-B (Máy tính truy cập):
+Bước 1: Trên máy tính PC-B, chọn This PC ở thanh menu bên trái, kéo xuống và chọn Network.
+Bước 2: Nháy đúp chuột vào biểu tượng của máy tính PC-A để truy cập thư mục có dữ liệu được chia sẻ.
+Nhiệm vụ 5: Chia sẻ máy in
+1. PC-A (Chia sẻ máy in):
+   - Mở Control Panel, chọn Devices and Printers.
+   - Nháy chuột phải vào máy in cần chia sẻ, chọn Properties > Sharing.
+   - Tích vào ô Share this printer và đặt tên chia sẻ máy in.
+2. PC-B (Kết nối đến máy in):
+   - Mở Control Panel, chọn Devices and Printers.
+   - Chọn Add a printer, sau đó chọn máy in từ danh sách các máy in được chia sẻ trên mạng LAN hoặc tìm kiếm máy in bằng Select a shared printer by name.
+3. Sau khi kết nối thành công, in một trang tài liệu từ PC-B để xác nhận kết nối và chia sẻ máy in.
+ 
+Tình huống và tình tiết phải liên quan tới:
+- Access Point (5 câu)
+- PC-A, PC-B (5 câu)
+- Switch (5 câu)
+- Kết nối mạng (5 câu)
+- Mạng di động (5 câu)
+- Mạng LAN (5 câu)
+ 
+Câu hỏi mẫu:
+1. Khi kết nối máy tính với Access Point trên Windows 10, bước đầu tiên bạn cần làm gì?
+a) Kiểm tra địa chỉ IP
+b) Nhập mật khẩu mạng Wi-Fi
+*c) Chọn tên mạng Wi-Fi
+d) Mở trình duyệt web
+ 
+2. Khi kết nối máy tính với Switch, dấu hiệu nào cho thấy kết nối vật lý đã thành công?
+*a) Đèn báo hiệu trên cổng sáng
+b) Máy tính khởi động lại
+c) Địa chỉ IP thay đổi
+d) Tự động mở trình duyệt web
+ 
+3. Bước đầu tiên để kết nối PC-B với máy in được chia sẻ từ PC-A là gì?
+*a) Full Control
+b) Read Only
+c) Change
+d) Write
+ 
+Lựa chọn có dấu * phía trước là lựa chọn đúng
+ 
+Requirements:
+- No other text but question content should be included
+- Options should not give away the answers too easily either by the options' lengths or the options' content
+- Options should be similar to each other in terms of lengths and content but there must always be only one truest option
+- Add a asterisk symbol before correct answer
+- Each answer must be different from others.
+- Correct answers should be randomly distributed
+- Correct answers should not always be the longest answer
+- Each questions must have different structures which can range from what's the best course of action, who is right, which course of action is more ethical, ...
+- No indentation in the question format.
+- Each question must be separated by a blank line.
+- Must generate text exactly from below format, not markdown or HTML:
+ 
+Each question's format (for example Option 2 is the correct answer):
+X. [Question]
+a) [Option 1]
+*b) [Option 2]
+c) [Option 3]
+d) [Option 4]
+
+Phần 2(giao thức mạng):
+Tạo một đề trắc nghiệm 30 câu hỏi về các giao thức mạng sử dụng các câu hỏi mẫu dưới đây làm ví dụ và các câu hỏi tuân theo yêu cầu bên dưới:
+
+[Số câu]. [Nội dung câu hỏi]
+a) [Lựa chọn a]
+*b) [Lựa chọn b]
+c) [Lựa chọn c]
+d) [Lựa chọn d]
+	
+Lưu ý dấu * là đáp án đúng
+
+Các câu hỏi chỉ được sử dụng các thông tin từ mục sau đây:
+I. Giao thức mạng
+a) Khái niệm cơ bản
+Là tập hợp các quy tắc được sử dụng để điều khiển truyền thông và trao đổi dữ liệu giữa các thiết bị trong mạng máy tính nhằm đáp ứng:
+-        Định dạng và chuẩn hóa
+-        Định tuyến và chuyển tiếp
+-        Quản lí lưu lượng mạng
+-        Bảo mật và độ tin cậy
+-        Tích hợp dịch vụ và ứng dụng
+b) Một số giao thức mạng
+-        Giao thức Internet (IP): Quan trọng trong mạng máy tính, là một phần của bộ giao thức TCP/IP.
+-        Giao thức vận chuyển (TCP và UDP): Quy định cách dữ liệu được chia thành gói tin, TCP đảm bảo độ tin cậy, UDP không yêu cầu kết nối và không đảm bảo độ tin cậy.
+-        Giao thức truyền tải siêu văn bản (HTTP): Sử dụng để truyền tải dữ liệu của các trang web, quy định cách giao tiếp giữa máy khách và máy chủ.
+-        Giao thức truyền tải tệp (FTP): Dùng để truyền tải tệp giữa các máy tính.
+-        Giao thức truyền tải thư đơn giản (SMTP): Sử dụng để gửi và nhận thư điện tử.
+2. Giao thức TCP
+TCP (Transmission Control Protocol) là giao thức đảm bảo truyền dữ liệu ổn định và đúng thứ tự giữa các ứng dụng trên mạng. Có cơ chế kiểm tra lỗi, khôi phục và điều chỉnh tốc độ truyền dữ liệu, sử dụng cho việc truyền thông tin như hình ảnh tĩnh, tệp dữ liệu và trang web. Quá trình sử dụng TCP bao gồm:
+- Thiết lập kết nối: Điều này xảy ra khi hai máy tính thiết lập kết nối trước khi truyền dữ liệu.
+- Trao đổi dữ liệu: Dữ liệu được chia thành các gói tin, mỗi gói tin có số thứ tự và số xác nhận để đảm bảo tính toàn vẹn và đúng thứ tự.
+- Kiểm tra lỗi và khôi phục: TCP sử dụng số thứ tự và số xác nhận để xác định và sửa chữa các gói tin bị mất hoặc lỗi.
+- Kết thúc kết nối: Quá trình đóng kết nối sau khi hoàn tất trao đổi dữ liệu giữa hai thiết bị.
+3. Giao thức IP
+-        Giao thức Internet (IP) quản lý và định tuyến gói tin trên mạng máy tính bằng cách gắn địa chỉ IP của máy gửi và máy nhận vào mỗi gói tin.
+-        IP đảm bảo chuyển tiếp các gói tin đến đúng đích dựa trên địa chỉ này.
+-        Địa chỉ IP là số duy nhất được gán cho mỗi thiết bị trong mạng
+-        Có hai phiên bản chính là IPv4 và IPv6.
+-        Các máy tính trong một mạng LAN sẽ có cùng một địa chỉ mạng.
+b) Hệ thống miền
+-        Mỗi trang web có một địa chỉ IP duy nhất trên Internet.
+-        Hệ thống tên miền DNS chuyển đổi tên miền dễ nhớ thành địa chỉ IP tương ứng, giúp người dùng truy cập web một cách thuận tiện.
+
+Tên miền được phân thành các cấp:
+-        Tên miền cấp cao nhất: là phần đuôi sau cùng của tên miền. Đây có thể là viết tắt tên một quốc gia (ví dụ: vn, us, uk,...) hay một tổ chức kinh tế – xã hội (ví dụ: com, org, net, edu, gov, info, biz, xyz, io, ai,...).
+-        Tên miền cấp hai: google.com, facebook.com, youtube.com, amazon.com,...
+-        Tên miền cấp ba: mail.google.com, news.google.com, drive.google.com,...
+-        Tên miền phụ là một phần thông tin mở rộng cho phép phân tách nội dung cho một chức năng cụ thể của trang web.
+
+
+Yêu cầu của đầu ra:
+    - Các đáp án trong 1 câu hỏi phải khác nhau
+    - Chỉ được có đúng 1 đáp án đúng cho mỗi câu
+    - Mỗi câu đều có 1 đáp án sai có độ dài bằng đáp án đúng để gây nhiễu
+    - Giữ y nguyên định dạng cho mỗi câu hỏi như mẫu trên và các ví dụ ở dưới
+    - Giữa câu hỏi, đáp án không có cách dòng
+    - Đáp án và câu hỏi thẳng hàng
+    - Đầu ra không có gì khác ngoài nội dung các câu hỏi để khi tôi chuyển đầu ra của bạn sang kiểu file khác thì không có lỗi xảy ra
+     - Tất cả nội dung câu hỏi kể cả đoạn code chỉ nằm trên 1 dòng không quan bố cục
+    - Các câu hỏi có 
+    - Hạn chế việc các đáp án đúng là phương án dài nhất
+    - Địa chỉ IP phải tạo ra phải là ngẫu nhiên
+    - Giữa các câu hỏi phải cách 1 dòng
+    - Các câu hỏi phải khác nhau
+    - Đưa ra ít nhất 5 câu hỏi về Giao Thức IP 
+    - Đưa ra ít nhất 5 câu hỏi về Giao thức TCP
+    - Đưa ra ít nhất 5 câu hỏi về Hệ thống miền
+    - Trong 1 số câu hỏi hãy bối cảnh sáng tạo gần gũi với học sinh cấp 3 việt nam và cho đan xen câu hỏi vào trong, câu hỏi vẫn phải được hiểu một cách rõ ràng.
+    - Hãy làm đáp án của câu hỏi trở nên khó phân biệt và dễ gây nhầm lẫn mà chính các lập trình viên cũng mắc phải, như việc dùng các từ có nghĩa gần tương đương nhau.
+
+
+
+Sau đây là những câu hỏi ví dụ bạn có thể dựa vào để ra đề:
+
+1. Địa chỉ IP nào sau đây là một địa chỉ IPv4 hợp lệ?
+a) 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+b) 192.168.1.256
+c) 10.0.0.257
+*d) 192.168.1.1
+
+2. Phát biểu nào sau đây mô tả sai về giao thức IP?
+a) IP là viết tắt của Internet Protocol
+b) Giao thức IP là một phần của bộ giao thức chính của Internet
+c) Giao thức IP phục vụ việc định tuyến trên mạng,giúp các Router tìm ra tuyến đường để chuyển gói tin tới đích
+*d) Hiện nay chỉ có một loại địa chỉ IP được sử dụng tên là IPv6, những phiên bản trước đó đã lỗi thời và không còn được sử dụng
+
+3. Phương án nào sau đây nêu đúng tên một giao thức mạng có nhiệm vụ định danh gói tin bằng cách gắn địa chỉ IP của trạm gửi và trạm nhận, sau đó xác định tuyến đường tốt nhất cho gói tin?
+a) HTTP 
+b) SMTP 
+c) TCP 
+*d) IP
+
+4. Giao thức mạng là gì?
+a) Phần cứng trong mạng
+*b) Tập hợp các quy định về cách thức giao tiếp trong mạng
+c) Phần mềm dùng để kiểm tra bảo mật
+d) Một loại thiết bị mạng
+
+5. Có bao nhiêu phiên bản địa chỉ IP chính?
+a) 1
+*b) 2
+c) 3
+d) 4
+
+6. Tên miền cấp ba là gì?
+*a) Tên miền phụ của một tên miền cấp hai
+b) Tên miền chính
+c) Một phần của địa chỉ IP
+d) Một loại giao thức mạng
+
+7. Giao thức nào thường được sử dụng cùng với IP để quản lý kết nối và truyền dữ liệu trong Internet?
+a) FTP
+b) SMTP
+*c) TCP
+d) DHCP
+
+8. Giao thức TCP cung cấp cơ chế gì để đảm bảo truyền dữ liệu tin cậy?
+a) Phát hiện và sửa lỗi
+b) Chuyển đổi địa chỉ IP
+*c) Chuyển đổi địa chỉ IP
+d) Phân phối tải giữa các máy chủ
+
+9. Địa chỉ IPv6 gồm bao nhiêu bit?
+a) 16 bit.
+b) 32 bit.
+c) 64 bit.
+*d) 128 bit.
+
+Phần 3(thực hành):
+Generate a 30-question exam about Computer Network Fundamentals in Vietnamese.
+
+Cách tạo tình huống:
+
+1. Viết nhiều tình huống như viết các truyện ngắn tối đa 4 câu và tối thiểu 3 câu với mỗi câu hỏi. Mỗi câu hỏi sử dụng ít nhất 10 tokens.
+2. Lồng kiến thức bên dưới vào câu hỏi
+3. Đảm bảo câu hỏi có nét riêng so với những câu hỏi trước về mặt cấu trúc và nội dung
+4. Kiểm tra xem câu hỏi có phù hợp với điều kiện trong bước 1,2 và 3 không. Nếu không, lặp lại bước 1, 2 và 3
+
+Scope of Knowledge:
+
+1. Mạng máy tính là hệ thống các thiết bị số được kết nối với nhau để truyền dữ liệu và trao đổi thông tin, có thể kết nối bằng dây cáp mạng hoặc sóng vô tuyến.
+
+   - Cáp mạng là dây dẫn có vỏ bọc bảo vệ và bên trong là dây dẫn kim loại để truyền tín hiệu điện. Cáp quang sử dụng dây dẫn trong suốt để truyền tín hiệu ánh sáng.
+   - Các thiết bị số trong mạng máy tính đặt trong một phạm vi địa lí nhất định để người dùng có thể truyền dữ liệu và trao đổi thông tin. Chia làm hai loại chính: thiết bị mạng và thiết bị đầu cuối.
+   - Địa chỉ MAC là một địa chỉ duy nhất gồm 12 ký tự hệ thập lục phân, biểu diễn cho mỗi thiết bị trong mạng máy tính, đảm bảo tính duy nhất và quản lý hiệu quả.
+   - Ít nhất 7 câu hỏi phải được tạo dựa trên phần kiến thức này.
+
+2. Mạng LAN:
+
+   - Mạng LAN là loại mạng kết nối các thiết bị trong phạm vi nhỏ như toà nhà, văn phòng, trường học, cho phép truyền dữ liệu và chia sẻ tài nguyên như máy tính, máy in qua cáp mạng và Switch.
+   - Switch là thiết bị trong mạng LAN có nhiều cổng mạng để kết nối và chuyển tiếp dữ liệu giữa các thiết bị.
+   - Switch sử dụng bảng địa chỉ MAC để xác định cổng nào để chuyển tiếp gói tin tới thiết bị nhận.
+   - Ít nhất 7 câu hỏi phải được tạo dựa trên phần kiến thức này.
+
+3. Mạng WLAN:
+
+   - Mạng WLAN là mạng cục bộ không dây sử dụng công nghệ Wi-Fi, cho phép các thiết bị như máy tính, điện thoại, máy tính bảng kết nối và truy cập vào tài nguyên mạng qua sóng radio.
+   - Các thành phần chính: thiết bị của người dùng có tích hợp bộ giao tiếp mạng không dây và điểm truy cập không dây (Access Point).
+   - Ít nhất 7 câu hỏi phải được tạo dựa trên phần kiến thức này.
+
+4. Mạng diện rộng (WAN) & Internet:
+
+   - WAN kết nối nhiều mạng LAN trên phạm vi rộng (thành phố, quốc gia, toàn cầu).
+   - Router là thiết bị chuyển tiếp dữ liệu trong WAN, tìm đường đi tối ưu dựa trên độ trễ, băng thông.
+   - Modem chuyển đổi tín hiệu giữa số và tương tự, kết nối với ISP.
+   - ISP (Nhà cung cấp dịch vụ Internet) kết nối người dùng với Internet, cung cấp các dịch vụ mạng.
+   - Ít nhất 7 câu hỏi phải được tạo dựa trên phần kiến thức này.
+
+Format:
+
+- No extra text, only question content should be included.
+- Correct answers should be randomly distributed.
+- Each answer (option) must be different from each other.
+- Must generate text exactly in this format (for example, Option 2 is the correct answer):
+
+X. [Question]
+a) [Option 1]
+*b) [Option 2]
+c) [Option 3]
+d) [Option 4]
+
+- Add an asterisk symbol (*) before the correct answer.
+- No indentation in the question format.
+- Each question must be separated by a blank line.
+- Ensure that the correct answer is always marked with "*" before the option letter to avoid formatting errors.
+
+Example question:
+
+1. Switch có chức năng chính gì trong mạng LAN?
+a) Chuyển tiếp gói tin giữa các mạng
+*b) Kết nối các thiết bị trong mạng LAN
+c) Quản lý băng thông của mạng
+d) Bảo mật dữ liệu truyền trong mạng
+
+2. Thiết bị nào trong mạng LAN có nhiệm vụ chuyển tiếp dữ liệu giữa các thiết bị?
+a) Router
+b) Modem
+*c) Switch
+d) Access Point
+
+3. Mạng diện rộng (WAN) có phạm vi địa lý như thế nào?
+
+a) Trong một phòng
+b) Trong một tòa nhà
+*c) Trong một thành phố hoặc quốc gia
+d) Trong một khu vực nhỏ
+
+4. Hãy cho biết chức năng của một router trong mạng máy tính.
+
+*a) Kết nối các mạng khác nhau và chuyển tiếp dữ liệu giữa chúng
+b) Lưu trữ dữ liệu
+c) In tài liệu
+d) Cung cấp năng lượng cho các thiết bị mạng
+
+Now, generate 30 questions in this exact format, ensuring all answers are properly marked with "*" for correct choices to prevent formatting issues.
