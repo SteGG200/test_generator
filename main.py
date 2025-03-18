@@ -3,13 +3,14 @@ from handler.const import DOCX_FILE, CONTENT_FILE, QTI_FILE
 from datetime import datetime
 import os
 from enum import Enum
+from typing import Tuple, List
 
 class Task(Enum):
 	CONTENT = 1 # task get content from model ai
 	QTI = 2 # task convert content.txt to QTI file
 	DOCX = 3 # task convert content.txt to docx file
 
-def uncomplete_run_detection() -> tuple[str, list[Task]]:
+def uncomplete_run_detection() -> Tuple[str, List[Task]]:
 	path = './dist'
 	if not os.path.exists(path):
 		return ("", [])
