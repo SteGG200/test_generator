@@ -8,6 +8,8 @@ from docx.text import paragraph
 from docx.text.run import Run
 from termcolor import colored
 
+from handlers.const import CONTENT_FILE, DOCX_FILE
+
 
 def create_element(name):
     return OxmlElement(name)
@@ -57,6 +59,30 @@ def add_page_number(run: Run):
     run._r.append(fldChar3)
     run._r.append(instrText2)
     run._r.append(fldChar4)
+
+
+def line_detect(line: str):
+    """
+    Check if line is in question or option content
+
+    0 - Child line (for multi-line questions or options)
+    1 - First line of question
+    2 - First line of option
+    3 - First line of correct option
+    -1 - Invalid line (not a question or option)
+    """
+    if "\n" in line:
+        raise ValueError(f'"{line}" is not a single line')
+    if line == "" or line.lstrip() != line:
+        return 0
+    elif line[0].isnumeric():
+        return 1
+    elif len(line) >= 2 and line[0].isalpha() and line[1] == ")":
+        return 2
+    elif len(line) >= 3 and line[0] == "*" and line[1].isalpha() and line[2] == ")":
+        return 3
+    else:
+        return -1
 
 
 def create_exam_document(path: str, exam_content: str):
@@ -123,47 +149,111 @@ def create_exam_document(path: str, exam_content: str):
     # Add exam content
     lines = exam_content.split("\n")
     total_number_questions = 0
-    question_section: paragraph.Paragraph = None
-    for line in lines:
-        if line == "":
-            question_section = None
-            continue
-        if question_section is not None:
-            if line.startswith(("a)", "b)", "c)", "d)")):
-                array_answer = line.split(")", 1)
-                if len(array_answer) != 2:
-                    raise ValueError("Invalid array answer format")
-                order_answer, content_answer = array_answer
-                question_section.add_run(f"\n{order_answer.upper()}. ").bold = True
-                question_section.add_run(content_answer)
-                question_section.add_run()
-            elif line.startswith("*"):
-                array_answer = line[1:].split(")", 1)
-                if len(array_answer) != 2:
-                    raise ValueError("Invalid array answer format")
-                order_answer, content_answer = array_answer
-                order_answer_section = question_section.add_run(
-                    f"\n{order_answer.upper()}. "
+    current_line_number = 1
+    question_paragraph: paragraph.Paragraph | None = None
+    while current_line_number <= len(lines):
+        current_line = lines[current_line_number - 1]
+        type_current_line = line_detect(current_line)
+        if type_current_line == -1:
+            raise ValueError(
+                f'In "{path}/{CONTENT_FILE}" on line {current_line_number}:\nUnexpected line'
+            )
+        elif type_current_line == 0:
+            if len(current_line.strip()) != 0:
+                raise ValueError(
+                    f'In "{path}/{CONTENT_FILE}" on line {current_line_number}:\nInvalid content format'
                 )
-                order_answer_section.underline = True
-                order_answer_section.bold = True
-                question_section.add_run(content_answer)
-            else:
-                question_section.add_run(f"\n{line}")
+            current_line_number += 1
         else:
-            index_separator = line.find(".")
-            if index_separator == -1:
-                raise ValueError("Invalid question format")
-            array_answer = line.split(".", 1)
-            if len(array_answer) != 2:
-                raise ValueError("Invalid question format")
-            number_question, content_question = array_answer
-            if not number_question.isnumeric():
-                raise ValueError("Invalid question format")
-            question_section = doc.add_paragraph()
-            total_number_questions += 1
-            question_section.add_run(f"Câu {number_question}: ").bold = True
-            question_section.add_run(content_question)
+            content_lines: list[str] = [current_line]
+            buffer_line_number = current_line_number + 1
+            while (
+                buffer_line_number <= len(lines)
+                and line_detect(lines[buffer_line_number - 1]) == 0
+            ):
+                content_lines.append(lines[buffer_line_number - 1])
+                buffer_line_number += 1
+
+            while content_lines[-1].strip() == "":
+                content_lines.pop()
+
+            if type_current_line == 2:  # Normal option
+                for index, content_line in enumerate(content_lines):
+                    if line_detect(content_line) == 0:
+                        question_paragraph.add_run(f"\n{content_line}")
+                    else:
+                        array_option = content_line.split(")", 1)
+                        if len(array_option) != 2:
+                            raise ValueError(
+                                f'In "{path}/{CONTENT_FILE}" on line {current_line_number + index}:\nInvalid option format'
+                            )
+                        order_option, content_option = array_option
+                        question_paragraph.add_run(
+                            f"\n{order_option.upper()}. "
+                        ).bold = True
+                        question_paragraph.add_run(content_option)
+                if (
+                    buffer_line_number <= len(lines)
+                    and line_detect(lines[buffer_line_number - 1]) == 1
+                ):
+                    # Set None at the end of question paragraph
+                    question_paragraph = None
+            elif type_current_line == 3:  # Correct option
+                for index, content_line in enumerate(content_lines):
+                    if line_detect(content_line) == 0:
+                        question_paragraph.add_run(f"\n{content_line}")
+                    else:
+                        array_option = content_line[1:].split(")", 1)
+                        if len(array_option) != 2:
+                            raise ValueError(
+                                f'In "{path}/{CONTENT_FILE}" on line {current_line_number + index}:\nInvalid correct option format'
+                            )
+                        order_option, content_option = array_option
+                        order_option_runner = question_paragraph.add_run(
+                            f"\n{order_option.upper()}. "
+                        )
+                        order_option_runner.underline = True
+                        order_option_runner.bold = True
+                        question_paragraph.add_run(content_option)
+                if (
+                    buffer_line_number <= len(lines)
+                    and line_detect(lines[buffer_line_number - 1]) == 1
+                ):
+                    # Set None at the end of question paragraph
+                    question_paragraph = None
+            else:  # Question content
+                for index, content_line in enumerate(content_lines):
+                    if len(content_line) > 0 and content_line[0].isnumeric():
+                        index_separator = content_line.find(".")
+                        if index_separator == -1:
+                            raise ValueError(
+                                f'In "{path}/{CONTENT_FILE}" on line {current_line_number + index}:\nInvalid question content format'
+                            )
+                        array_answer = content_line.split(".", 1)
+                        if len(array_answer) != 2:
+                            raise ValueError(
+                                f'In "{path}/{CONTENT_FILE}" on line {current_line_number + index}:\nInvalid question content format'
+                            )
+                        number_question, content_question = array_answer
+                        if not number_question.isnumeric():
+                            raise ValueError(
+                                f'In "{path}/{CONTENT_FILE}" on line {current_line_number + index}:\nInvalid question content format'
+                            )
+
+                        if question_paragraph is not None:
+                            raise ValueError(
+                                f'In "{path}/{CONTENT_FILE} on line {current_line_number + index}:\nInvalid question content format'
+                            )
+
+                        question_paragraph = doc.add_paragraph()
+                        total_number_questions += 1
+                        question_paragraph.add_run(
+                            f"Câu {number_question}: "
+                        ).bold = True
+                        question_paragraph.add_run(content_question)
+                    else:
+                        question_paragraph.add_run(f"\n{content_line}")
+            current_line_number = buffer_line_number
 
     # Add total number of questions
     instructions.add_run(
@@ -179,10 +269,10 @@ def create_exam_document(path: str, exam_content: str):
     footer.add_run("- Thí sinh không được sử dụng tài liệu;\n").italic = True
     footer.add_run("- Cán bộ coi thi không giải thích gì thêm.").italic = True
 
-    # Save to file docx
-    filename = "de_thi.docx"
-    doc.save(f"{path}/{filename}")
+    doc.save(f"{path}/{DOCX_FILE}")
+
     print(
         colored("    └── ", "blue")
-        + colored(f"Đã tạo file docx thành công: {path}/{filename}", "green")
+        + colored("Đã tạo file docx thành công:", "green")
+        + f"{path}/{DOCX_FILE}"
     )
