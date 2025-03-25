@@ -6,7 +6,7 @@ from docx.oxml.xmlchemy import BaseOxmlElement
 from docx.shared import Inches, Pt
 from docx.text import paragraph
 from docx.text.run import Run
-from termcolor import colored
+from rich import print
 
 from handlers.const import CONTENT_FILE, DOCX_FILE
 
@@ -272,7 +272,7 @@ def create_exam_document(path: str, exam_content: str):
     doc.save(f"{path}/{DOCX_FILE}")
 
     print(
-        colored("    └── ", "blue")
-        + colored("Đã tạo file docx thành công:", "green")
-        + f"{path}/{DOCX_FILE}"
+        "[blue]    └── [/blue]"
+        "[green]Đã tạo file docx thành công: [/green]"
+        f"[white]{path}/{DOCX_FILE}[/white]"
     )

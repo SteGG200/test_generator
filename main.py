@@ -3,7 +3,7 @@ import warnings
 from datetime import datetime
 
 from clize import ArgumentError, run
-from termcolor import colored
+from rich import print
 
 from handlers import convert_to_QTI, create_exam_document, get_exam_content
 
@@ -47,18 +47,18 @@ def generate(
     if not os.path.exists(f"{path}/logs"):
         os.makedirs(f"{path}/logs")
 
-    print(colored("Đang tạo đề thi tại ", "yellow") + path + colored("...", "yellow"))
+    print(f"[yellow]Đang tạo đề thi tại [white]{path}[/white]...[/yellow]")
 
     # Get exam content from API
-    print(colored("├── ", "blue") + colored("Đang tạo nội dung đề thi...", "yellow"))
+    print("[blue]├── [/blue][yellow]Đang tạo nội dung đề thi...[/yellow]")
     exam_content = get_exam_content(mode, path, prefer_llm, shuffle)
 
     # Create QTI file
-    print(colored("├── ", "blue") + colored("Đang tạo file zip QTI...", "yellow"))
+    print("[blue]├── [/blue][yellow]Đang tạo file zip QTI...[/yellow]")
     convert_to_QTI(path, exam_content)
 
     # Create document
-    print(colored("└── ", "blue") + colored("Đang tạo file docx...", "yellow"))
+    print("[blue]└── [/blue][yellow]Đang tạo file docx...[/yellow]")
     create_exam_document(path, exam_content)
 
     print()

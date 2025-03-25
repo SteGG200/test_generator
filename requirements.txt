@@ -1,8 +1,7 @@
 clize>=5.0.2
-inquirer>=3.4.0
 openai>=1.63.0
 python-dotenv>=1.0.1
 python_docx>=1.1.2
-termcolor>=2.5.0
+rich>=13.9.4
 text2qti>=0.7.1
 toml>=0.10.2

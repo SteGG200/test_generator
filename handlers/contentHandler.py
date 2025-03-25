@@ -3,10 +3,10 @@ import random
 from pathlib import Path
 
 import dotenv
-import inquirer
 import toml
 from openai import OpenAI
-from termcolor import colored
+from rich import print
+from rich.prompt import Confirm
 from toml import TomlDecodeError
 
 from handlers.const import CONTENT_FILE
@@ -120,12 +120,10 @@ def get_exam_content(mode: str, path: str, prefer_llm: bool, shuffle: bool):
 
     if mode == "manual":
         print(
-            colored("│   └── ", "blue")
-            + colored(
-                "Nội dung đề thi định dạng QTI-compatible sẽ được đọc từ: ",
-                "green",
+            (
+                "[blue]│   └── [/blue]"
+                f"[green]Nội dung đề thi định dạng QTI-compatible sẽ được đọc từ: [white]{content_dir}[/white][/green]"
             )
-            + content_dir
         )
 
         with open(content_dir, "r", encoding="utf-8") as log:
@@ -141,33 +139,17 @@ def get_exam_content(mode: str, path: str, prefer_llm: bool, shuffle: bool):
             prompt_name = prompt_dir.stem
 
             print(
-                colored("│   ├── ", "blue")
-                + colored("Đang xử lí prompt ", "yellow")
-                + prompt_name
-                + colored("...", "yellow")
+                (
+                    "[blue]│   ├── [/blue]"
+                    f"[green]Đang xử lí prompt [white]{prompt_name}[/white]...[/green]"
+                )
             )
 
             log_dir = f"{path}/logs/{prompt_name}.txt"
             content_curr = ""
 
-            do_let_llm_generate_content = (
-                prefer_llm
-                or inquirer.prompt(
-                    [
-                        inquirer.Confirm(
-                            "answer",
-                            message=colored(
-                                "Bạn có muốn để ",
-                                "yellow",
-                            )
-                            + MODEL
-                            + colored(" sinh nội dung của ", "yellow")
-                            + log_dir
-                            + colored("?", "yellow"),
-                            default=False,
-                        )
-                    ]
-                )["answer"]
+            do_let_llm_generate_content = prefer_llm or Confirm.ask(
+                f"[yellow]Bạn có muốn để [white]{MODEL}[/white] sinh nội dung của [white]{log_dir}[/white]?[/yellow]"
             )
 
             if do_let_llm_generate_content:
@@ -187,10 +169,10 @@ def get_exam_content(mode: str, path: str, prefer_llm: bool, shuffle: bool):
             content += f"{content_curr}\n"
 
             print(
-                colored("│   │   └── ", "blue")
-                + colored("Đã đọc nội dung đề thi được sinh bởi prompt ", "green")
-                + prompt_name
-                + colored(" thành công.", "green")
+                (
+                    "[blue]│   │   └── [/blue]"
+                    + f"[green]Đã đọc nội dung đề thi được sinh bởi prompt [white]{prompt_name}[/white] thành công.[/green]"
+                )
             )
 
         with open(content_dir, "w+", encoding="utf-8") as log:
@@ -203,10 +185,10 @@ def get_exam_content(mode: str, path: str, prefer_llm: bool, shuffle: bool):
             prompt_name = prompt_dir.stem
 
             print(
-                colored("│   ├── ", "blue")
-                + colored("Đang xử lí prompt ", "yellow")
-                + prompt_name
-                + colored("...", "yellow")
+                (
+                    "[blue]│   ├── [/blue]"
+                    f"[yellow]Đang xử lí prompt [white]{prompt_name}[/white]..."
+                )
             )
 
             log_dir = f"{path}/logs/{prompt_name}.toml"
@@ -218,64 +200,77 @@ def get_exam_content(mode: str, path: str, prefer_llm: bool, shuffle: bool):
                 n_attempts += 1
 
                 print(
-                    colored("│   │   ├── ", "blue")
-                    + colored(f"Lần chạy #{n_attempts}...", "yellow")
-                )
-
-                do_let_llm_generate_content = (
-                    prefer_llm
-                    or inquirer.prompt(
-                        [
-                            inquirer.Confirm(
-                                "answer",
-                                message=colored(
-                                    "Bạn có muốn để ",
-                                    "yellow",
-                                )
-                                + MODEL
-                                + colored(" sinh nội dung của ", "yellow")
-                                + log_dir
-                                + colored("?", "yellow"),
-                                default=False,
-                            )
-                        ]
-                    )["answer"]
-                )
-
-                if do_let_llm_generate_content:
-                    response = client.chat.completions.create(
-                        model=MODEL,
-                        messages=[{"role": "user", "content": get_prompt(prompt_dir)}],
+                    (
+                        "[blue]│   │   ├── [/blue]"
+                        f"[yellow]Lần chạy #{n_attempts}...[/yellow]"
                     )
-                    content_curr_raw = response.choices[0].message.content
-                    assert content_curr_raw is not None
+                )
 
-                    with open(log_dir, "w+", encoding="utf-8") as log:
-                        log.write(content_curr_raw)
-                else:
-                    with open(log_dir, "r", encoding="utf-8") as log:
-                        content_curr_raw = log.read()
+                do_let_llm_generate_content = prefer_llm or Confirm.ask(
+                    f"[yellow]Bạn có muốn để [white]{MODEL}[/white] sinh nội dung của [white]{log_dir}[/white]?[/yellow]"
+                )
 
                 try:
+                    if do_let_llm_generate_content:
+                        response = client.chat.completions.create(
+                            model=MODEL,
+                            messages=[
+                                {"role": "user", "content": get_prompt(prompt_dir)}
+                            ],
+                        )
+                        content_curr_raw = response.choices[0].message.content
+                        assert content_curr_raw is not None
+
+                        with open(log_dir, "w+", encoding="utf-8") as log:
+                            log.write(content_curr_raw)
+                    else:
+                        with open(log_dir, "r", encoding="utf-8") as log:
+                            content_curr_raw = log.read()
                     content_curr_dict = toml_to_dict(content_curr_raw)
                     succeeded = True
+
                 except TomlDecodeError as error_msg:
                     print(
-                        colored("│   │   │   ├── ", "blue")
-                        + colored("Thông báo lỗi: ", "red")
-                        + f"{error_msg}"
-                    )
-                    print(
-                        colored("│   │   │   ├── ", "blue")
-                        + colored(
-                            "Xin hãy kiểm tra nội dung đề thi định dạng TOML AI-generated đã được tạo ở: ",
-                            "red",
+                        (
+                            "[blue]│   │   │   ├── [/blue]"
+                            f"[red]Thông báo lỗi: [/red]"
+                            f"[white]{error_msg}[/white]"
                         )
-                        + log_dir,
                     )
                     print(
-                        colored("│   │   │   └── ", "blue")
-                        + colored("Đang thử lại...", "yellow")
+                        (
+                            "[blue]│   │   │   ├── [/blue]"
+                            f"[red]Xin hãy kiểm tra nội dung đề thi định dạng TOML đã được tạo ở: [/red]"
+                            f"[white]{log_dir}[/white]"
+                        )
+                    )
+                    print(
+                        (
+                            "[blue]│   │   │   └── [/blue]"
+                            "[yellow]Đang thử lại...[/yellow]"
+                        )
+                    )
+
+                except FileNotFoundError as error_msg:
+                    print(
+                        (
+                            "[blue]│   │   │   ├── [/blue]"
+                            f"[red]Thông báo lỗi: [/red]"
+                            f"[white]{error_msg}[/white]"
+                        )
+                    )
+                    print(
+                        (
+                            "[blue]│   │   │   ├── [/blue]"
+                            f"[red]Xin hãy đảm bảo rằng tồn tại nội dung đề thi định dạng TOML ở: [/red]"
+                            f"[white]{log_dir}[/white]"
+                        )
+                    )
+                    print(
+                        (
+                            "[blue]│   │   │   └── [/blue]"
+                            "[yellow]Đang thử lại...[/yellow]"
+                        )
                     )
 
             content_dict.update(
@@ -286,22 +281,21 @@ def get_exam_content(mode: str, path: str, prefer_llm: bool, shuffle: bool):
             )
 
             print(
-                colored("│   │   └── ", "blue")
-                + colored("Đã đọc nội dung đề thi được sinh bởi prompt ", "green")
-                + prompt_name
-                + colored(" thành công.", "green")
+                (
+                    "[blue]│   │   └── [/blue]"
+                    + f"[green]Đã đọc nội dung đề thi được sinh bởi prompt [white]{prompt_name}[/white] thành công.[/green]"
+                )
             )
 
         with open(content_dir, "w+", encoding="utf-8") as log:
             log.write(dict_to_qti_compatible(content_dict, shuffle))
 
     print(
-        colored("│   └── ", "blue")
-        + colored(
-            "Đã tạo nội dung đề thi định dạng QTI-compatible thành công: ",
-            "green",
+        (
+            "[blue]│   └── [/blue]"
+            + "[green]Đã tạo nội dung đề thi định dạng QTI-compatible thành công: [/green]"
+            + f"[white]{content_dir}[/white]"
         )
-        + content_dir
     )
 
     with open(content_dir, "r", encoding="utf-8") as log:
