@@ -1,5 +1,9 @@
 # Exam Generator Tool
 
+> [!WARNING]
+> Still in beta. Breaking changes are expected without notice. Please read
+> the documentation carefully.
+
 Exam Generator is a python tool for generating exam.
 
 This tool uses API from [OpenRouter](https://openrouter.ai/).
@@ -8,15 +12,15 @@ This tool uses API from [OpenRouter](https://openrouter.ai/).
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Customizing the prompt](#customizing-the-prompt)
+- [More information](#more-information)
 
 ## Installation
 
 ### Python
 
-Requires `python` 3.8+.
+Python 3.9+ is tested and officially supported.
 
-Install dependencies with the following command.
+Install dependencies with the following commands.
 
 - For Unix systems:
 
@@ -38,193 +42,142 @@ Install dependencies with the following command.
     pip install -r requirements.txt
     ```
 
-### OpenRouter API key
+### API key
 
 Create a file `.env` at the root of the project and set the following variables.
+`API_KEY` is required, `MODEL` is optional.
 
 ```env
-API_KEY='<YOUR_OPENROUTER_API_KEY>'
-MODEL='<OPENROUTER_MODEL>'
+API_KEY=<YOUR_API_KEY>
+MODEL=<MODEL>
 ```
 
-**Note**:
-
-- `API_KEY` is required, `MODEL` is optional.
-- If you don't set the `MODEL` variable, the tool will automatically use the
-  `google/gemini-2.0-pro-exp-02-05:free` model.
+> [!NOTE]
+> Google AI Studio API key is preferred and officialy supported. Front handler
+> `legacy` use OpenRouter API key. To use another API key, you can write a
+> custom front handler.
 
 ## Usage
 
-For basic usage, simply run `python main.py` (legacy) or
-`python main.py -m "generated_toml"` (for prompts that generate questions in
-TOML format).
+For basic usage, customise `config.toml` to your own liking and simply run
+`python main.py`.
 
 Find all options by running `python main.py --help`.
 
 ```
 $ python main.py --help
-python main.py -h
+
 Usage: main.py [OPTIONS]
 
 Generate a contest from prompts.
 
 Options:
-  -m, --mode=STR     How content.txt should be prepared. One of generated_qti, generated_toml, manual. (default: generated_qti)
-  -p, --path=STR     Path to output. (default: )
-  -a, --prefer-llm   (Only in generated_qti or generated_toml mode) If not, always ask before sending request to LLM.
-  -s, --shuffle      (Only in generated_toml mode) Generated problems are shuffled. Useful when there are multiple prompts.
+  -c, --config=STR         Path to config file. (default: config.toml)
+  -o, --output=STR         Path to output. Will be created if not exists. (default: dist/{datetime})
+  -r, --raw-content-only   docx and QTI zip files will not be generated.
+  -a, --always-use-llm     Always use LLM to generate content instead of asking each time.
 
 Other actions:
-  -h, --help         Show the help
+  -h, --help               Show the help
 ```
 
-Prompts should be put under the path `prompts`. Their output will be merged into
-one contest.
+### Config file
+
+The default config file is at `config.toml`.
+
+```toml
+# config.toml
+
+[global]
+shuffle = false
+back_handler = "default"
+
+[[batch]]
+prompt = "informatics/database"
+n_problems = 24
+front_handler = "multiple_choice/default"
+
+[[batch]]
+prompt = "informatics/database"
+n_problems = 4
+front_handler = "true_false/default"
+```
+
+This config file specifies 2 batches. The first one contains 24 problems, using
+front handler `multiple_choice/default`. The second one contains 4 problems,
+using front handler `true_false/default`. Note how both uses the prompt
+`informatics/database`.
+
+Explanation:
+
+- `front_handler = "multiple_choice/default"`:
+
+    - [`handlers/frontHandlers/multiple_choice/default.py`](handlers/frontHandlers/multiple_choice/default.py)
+      must contain the function `handler(prompt_content, n_problems)`.
+
+    - `prompt_content` is the prompt to be sent to the LLM.
+
+    - `n_problems` is the number of problems to be generated.
+
+    - The function returns a `dict` (to be written to and read from JSON files).
+
+- `back_handler = "default"`
+
+    - [`handlers/backHandlers/default.py`](handlers/backHandlers/default.py)
+      must contain the function `handler(content_dict, path)`.
+
+    - `content_dict` is a dict that maps `batch_{id}` to the LLM's response
+      (given by `front_handler`) for that batch.
+
+    - `path` is the output path. Useful if you want to generate images to be
+      attached.
+
+    - The function returns a `str` (to be written to the txt content file).
+
+- `prompt = "informatics/database"`:
+
+    - Specifies the prompt at
+      [`prompts/informatics/database.txt`](handlers/frontHandlers/multiple_choice/default.py).
+
+- `n_problems = 4`:
+
+    - Specifies the number of problems this batch should generate, in this
+      case 4.
+
+    - Sometimes the expected output length may exceed the LLM's limit. In this
+      case, you can specify multiple batches while using the same `prompt` and
+      `front_handler`.
+
+- `shuffle = false`:
+
+    - Generated problems will not be shuffled. Useful when there are multiple
+      batches.
+
+### Output
 
 The default output path is `dist/{datetime}`. The directory structure is as
 follows.
 
-- `generated_toml` mode:
-
-    ```
-    dist
-    ├── {datetime}:
-    │     ├── logs
-    │     │     ├── content_{name of prompt #1}_1.toml # Output of prompt #1 in TOML format.
-    │     │     └── ...
-    │     ├── content.txt # Contest problems in QTI-compatible format.
-    │     ├── dethi.docx # Contest problems in DOCX format.
-    │     └── qti.zip # QTI file for Canvas.
-    └── ...
-    ```
-
-- `generated_qti` mode:
-
-    ```
-    dist
-    ├── {datetime}:
-    │     ├── logs
-    │     │     ├── content_{name of prompt #1}_1.txt # Output of prompt #1 in QTI-compatible format.
-    │     │     └── ...
-    │     ├── content.txt # Contest problems in QTI-compatible format.
-    │     ├── dethi.docx # Contest problems in DOCX format.
-    │     └── qti.zip # QTI file for Canvas.
-    └── ...
-    ```
-
-- `manual` mode:
-
-    ```
-    dist
-    ├── {datetime}:
-    │     ├── content.txt # (MANUALLY PROVIDED NOT GENERATED) Contest problems in QTI-compatible format.
-    │     ├── dethi.docx # Contest problems in DOCX format.
-    │     └── qti.zip # QTI file for Canvas.
-    └── ...
-    ```
-
-For more information, consult the following section.
-
-## Customizing the prompt
-
-### `generated_toml` mode
-
-The prompt should print out problems in the following TOML format.
-
-```toml
-[<Số thứ tự câu>]
-question = """Đây là nội dung câu hỏi. \
-Có thể gồm nhiều dòng."""
-choices = [
-    """Đây là nội dung phương án A. \
-        Có thể gồm nhiều dòng.""",
-    """Đây là nội dung phương án B. \
-        Có thể gồm nhiều dòng.""",
-    """Đây là nội dung phương án C. \
-        Có thể gồm nhiều dòng.""",
-    """Đây là nội dung phương án D. \
-        Có thể gồm nhiều dòng."""
-]
-correct_index = 2 # Biểu thị đáp án đúng là C (các đáp án được đánh số từ 0 đến 3)
+```
+dist
+├── {datetime}:
+│     ├── assets
+│     │     └── ... # Images to be attached if needed.
+│     ├── logs
+│     │     └── ... # LLM outputs in JSON format.
+│     ├── prompts
+│     │     └── ... # Copies of the prompts used.
+│     ├── content.txt # Contest problems in QTI-compatible txt format.
+│     ├── dethi.docx # Contest problems in docx format.
+│     └── qti.zip # QTI file for Canvas.
+└── ...
 ```
 
-There should be example prompts under `prompts` for reference.
+> [!WARNING]  
+> Docx generation is currently NOT supported for true/false questions.
 
-### `generated_qti` mode
+## More information
 
-You must ensure that the `content.txt` file, which is the response from model
-API, follows the format below (assuming that option b is the correct answer):
+For more information about the QTI-compatible text format, consult
+[the `text2qti` repository](https://github.com/gpoore/text2qti).
 
-```txt
-[Number]. [Question]
-a) [Option a]
-*b) [Option b]
-c) [Option c]
-d) [Option d]
-```
-
-A correct answer always begins with a asterisk (\*).
-
-About multi-line question or multi-line answer:
-
-```txt
-|
-| /* Indentation:
-| Question or answer that oppucies more than 1 line
-| must have at least this indentation*/
-| |
-1. [Question]
-| |
-| [Question continued, so indentation]
-| |
-a) [Possible answer]
-| |
-| [Possible answer continued, so indentation]
-| |
-*b) [Correct answer]
-|
-...
-```
-
-For example:
-
-````txt
-1. Thuộc tính CSS nào được sử dụng để thay đổi màu chữ của một phần tử?
-a) `font-color`
-*b) `color`
-c) `text-color`
-d) `foreground-color`
-
-2. Đoạn mã:
-    ```
-    <ol type="A" start="3">
-            <li>Item 1</li>
-            <li>Item 2</li>
-    </ol>
-    ```
-    Kết quả hiển thị sẽ như thế nào?
-a) 1. Item 1
-    2. Item 2
-b) A. Item 1
-    B. Item 2
-*c) C. Item 1
-    D. Item 2
-d) 3. Item 1
-    4. Item 2
-
-**Note**: code block like HTML tags should be put in backticks to ensure QTI
-output is correct.
-
-### Comment in prompt:
-
-Use `//` or `/**/` syntax to comment in your prompt.
-
-```txt
-// This line isn't included in the prompt
-
-/*
-This is also comment
-and isn't included.
-*/
-```
-````

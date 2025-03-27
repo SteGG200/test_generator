@@ -1,0 +1,74 @@
+Giúp mình tạo một đề thi gồm 10 câu về Vật lí cho học sinh Trung học Phổ thông.
+
+Hãy đặt các câu chủ đề nhiệt lượng (công thức Q = m c DeltaT), với độ khó cao.
+Câu hỏi chủ đề như sau: Có một bạn học sinh đun nước. Trong quá trình đun, từ 1 trong những sự kiện như sau có thể xảy ra:
+
+- Bạn học sinh tắt bếp.
+- Bạn học sinh thêm đổ một lượng nước ở nhiệt độ nào đó vào.
+- Bạn học sinh sử dụng bếp có công suất khác.
+
+Dưới đây là một câu hỏi mẫu (ĐỪNG SINH LẠI CÂU HỎI NÀY). Hãy sáng tạo và đừng tạo các câu hỏi giống nhau!
+
+```
+Một ấm đun nước có công suất không đổi 2100 W và có nhiệt kế hiển thị nhiệt độ tức thời của nước trong ấm. Một bạn học sinh dùng ấm này để đun nước với lượng nước có sẵn trong ấm, nhiệt độ ban đầu là t0 = 20 độ C. Sau khoảng thời gian đun tau1 = 1 phút thì nhiệt độ của nước tăng lên tới t1 = 40 độ C và bạn học sinh bắt đầu thêm nước ở nhiệt độ tx độ C (tx < t1) vào trong ấm. (nước được đun liên tục và đảm bảo an toàn về điện) Tại thời điểm tau2 = 5 phút thì nhiệt độ của nước đạt t2 = 60 độ C. Sau khoảng thời gian 5 phút kể từ thời điểm tau2 thì nước bắt đầu sôi. Bỏ qua sự truyền nhiệt ra môi trường. Quá trình trao đổi nhiệt diễn ra nhanh chóng. Biết nhiệt dung riêng và nhiệt hóa hơi riêng của nước lần lượt là 4 200 J/(kg.K) và 2.3e6 J/kg.
+
+a) Nhiệt lượng do ấm cung cấp từ thời điểm ban đầu đến thời điểm nước bắt đầu sôi là 21 000 J.
+
+b) Lượng nước có sẵn trong ấm và lượng nước được thêm vào ấm lần lượt là 2,25 kg và 1,5 kg.
+
+c) Nhiệt độ ban đầu của lượng nước được thêm vào ấm là tx = 20 độ C.
+
+d) Khi nước sôi, bạn học sinh lấy ra 3 kg nước từ ấm. Bạn quên đậy nắp và không ngắt điện. Sau 10 phút nước trong ấm chưa bay hơi hoàn toàn.
+```
+
+```json
+"q0": {
+  "question_context": "Bạn học sinh dùng ấm để đun nước. Sau một thời gian, bạn học sinh bắt đầu thêm nước ở nhiệt độ nào đó vào ấm. Sau một thời gian nữa thì nước đạt 60 độ C. Sau một thời gian nữa thì nước sôi.",
+  "variables": {
+      "event": [
+          "",
+          "Thêm nước lạnh vào",
+          ""
+      ],
+      "time": [
+          0,
+          1,
+          5,
+          10
+      ],
+      "temperature": [
+          20,
+          40,
+          60,
+          100
+      ]
+  },
+  "question": "Một ấm đun nước có công suất không đổi 2100 W và có nhiệt kế hiển thị nhiệt độ tức thời của nước trong ấm. Một bạn học sinh dùng ấm này để đun nước với lượng nước có sẵn trong ấm, nhiệt độ ban đầu là t0 = 20 độ C. Sau khoảng thời gian đun tau1 = 1 phút thì nhiệt độ của nước tăng lên tới t1 = 40 độ C và bạn học sinh bắt đầu thêm nước ở nhiệt độ tx độ C (tx < t1) vào trong ấm. (nước được đun liên tục và đảm bảo an toàn về điện) Tại thời điểm tau2 = 5 phút thì nhiệt độ của nước đạt t2 = 60 độ C. Sau khoảng thời gian 5 phút kể từ thời điểm tau2 thì nước bắt đầu sôi. Bỏ qua sự truyền nhiệt ra môi trường. Quá trình trao đổi nhiệt diễn ra nhanh chóng. Biết nhiệt dung riêng và nhiệt hóa hơi riêng của nước lần lượt là 4 200 J/(kg.K) và 2.3e6 J/kg.",
+  "solution": "Thông tin đã cho:\n\n    Công suất ấm đun nước (P): 2100 W\n    Nhiệt độ ban đầu (t0): 20°C\n    Thời gian đun đến t1 (τ1): 1 phút = 60 giây\n    Nhiệt độ sau 1 phút (t1): 40°C\n    Thời gian đun đến t2 (τ2): 5 phút = 300 giây\n    Nhiệt độ sau 5 phút (t2): 60°C\n    Thời gian đun đến sôi (t sôi) : 5 phút sau thời điểm tau2 = 10 phút = 600 giây.\n    Nhiệt dung riêng của nước (c): 4200 J/(kg.K)\n    Nhiệt hóa hơi riêng của nước (L): 2.3e6 J/kg\n\na) Nhiệt lượng do ấm cung cấp từ thời điểm ban đầu đến thời điểm nước bắt đầu sôi là?\n\n    Tổng thời gian đun đến khi sôi: 5 phút + 5 phút = 10 phút = 600 giây.\n    Nhiệt lượng (Q) = Công suất (P) × Thời gian (t)\n    Q = 2100 W × 600 s = 1,260,000 J = 1260 kJ.\n\nb) Lượng nước có sẵn trong ấm và lượng nước được thêm vào ấm lần lượt là?\n\n    Lượng nước ban đầu (m1):\n        Nhiệt lượng cung cấp trong 1 phút đầu: Q1 = 2100 W × 60 s = 126,000 J.\n        Độ tăng nhiệt độ: Δt1 = t1 - t0 = 40°C - 20°C = 20°C.\n        m1 = Q1 / (c × Δt1) = 126,000 J / (4200 J/(kg.K) × 20 K) = 1.5 kg.\n    Lượng nước được thêm vào ấm (m2):\n        Nhiệt lượng cung cấp từ phút thứ 1 đến phút thứ 5: Q2 = 2100(W) * 240(s) = 504000(J).\n        Độ tăng nhiệt độ từ phút thứ 1 đến phút thứ 5: deltaT = 60 - 40 = 20 độ C.\n        Tổng số nước trong ấm lúc phút thứ 5 : m = Q2 / (c * deltaT) = 504000 / (4200 * 20) = 6 kg.\n        Vậy lượng nước thêm vào là : m2 = m - m1 = 6 - 1.5 = 4.5 kg.\n\nc) Nhiệt độ ban đầu của lượng nước được thêm vào ấm là?\n\n    Nhiệt lượng cung cấp từ phút thứ 1 đến phút thứ 5: Q2 = 504000 J.\n    Nhiệt lượng nước ban đầu nhận được từ phút thứ 1 đến phút thứ 5 : Qn1 = m1 * c * deltaT = 1.5 * 4200 * 20 = 126000J.\n    Nhiệt lượng lượng nước mới nhận được : Qn2 = Q2 - Qn1 = 504000 - 126000 = 378000J.\n    Vậy nhiệt độ ban đầu của nước mới là : Tn = 60 - (Qn2 / (m2 * c)) = 60 - (378000 / (4.5 * 4200)) = 40 độ C.\n\nd) Khi nước sôi, bạn học sinh lấy ra 3 kg nước từ ấm. Bạn quên đậy nắp và không ngắt điện. Sau 10 phút nước trong ấm đã bay hơi hoàn toàn chưa?\n\n    Lượng nước còn lại sau khi lấy ra: 6 kg - 3 kg = 3 kg.\n    Nhiệt lượng cần để hóa hơi 3 kg nước: Qh = 3 kg × 2.3e6 J/kg = 6.9e6 J.\n    Nhiệt lượng ấm cung cấp trong 10 phút: Q10 = 2100 W × 600 s = 1,260,000 J.\n    Vì Q10 < Qh nên sau 10 phút nước trong ấm chưa bay hơi hết.\n\nKết luận:\n\n    a) 1,260,000 J\n    b) 1.5 kg, 4.5 kg.\n    c) 40 độ C.\n    d) Chưa bay hơi hết."
+  "statements": [
+      {
+          "base": "Nhiệt lượng do ấm cung cấp từ thời điểm ban đầu đến thời điểm nước bắt đầu sôi là Q = "
+          "true": "Nhiệt lượng do ấm cung cấp từ thời điểm ban đầu đến thời điểm nước bắt đầu sôi lớn hơn 30 000 J",
+          "false": "Nhiệt lượng do ấm cung cấp từ thời điểm ban đầu đến thời điểm nước bắt đầu sôi là 21 000 J"
+      },
+      {
+          "true": "Lượng nước có sẵn trong ấm và lượng nước được thêm vào ấm lần lượt là 1,5 kg và 1,25 kg.",
+          "false": "Lượng nước có sẵn trong ấm và lượng nước được thêm vào ấm lần lượt là 2,25 kg và 1,5 kg."
+      },
+      {
+          "true": "Nhiệt độ ban đầu của lượng nước được thêm vào ấm là tx = 20 độ C.",
+          "false": "Nhiệt độ ban đầu của lượng nước được thêm vào ấm là tx = 30 độ C."
+      },
+      {
+          "true": "Khi nước sôi, bạn học sinh lấy ra 3 kg nước từ ấm. Bạn quên đậy nắp và không ngắt điện. Sau 10 phút nước trong ấm chưa bay hơi hoàn toàn.",
+          "false": "Khi nước sôi, bạn học sinh lấy ra 3 kg nước từ ấm. Bạn quên đậy nắp và không ngắt điện. Sau 10 phút nước trong ấm đã bay hơi hoàn toàn."
+      }
+  ],
+  "is_true": [
+      1,
+      0,
+      1,
+      0
+  ]
+}
+```

@@ -1,3 +1,5 @@
+import os
+
 from docx import Document
 from docx.enum.table import WD_ALIGN_VERTICAL
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -7,8 +9,6 @@ from docx.shared import Inches, Pt
 from docx.text import paragraph
 from docx.text.run import Run
 from rich import print
-
-from handlers.const import CONTENT_FILE, DOCX_FILE
 
 
 def create_element(name):
@@ -85,7 +85,10 @@ def line_detect(line: str):
         return -1
 
 
-def create_exam_document(path: str, exam_content: str):
+def docx_handler(path: str):
+    with open(os.path.join(path, "content.txt")) as log:
+        exam_content = log.read()
+
     if len(exam_content) == 0:
         raise ValueError("Nội dung đề thi không hợp lệ")
 
@@ -156,12 +159,12 @@ def create_exam_document(path: str, exam_content: str):
         type_current_line = line_detect(current_line)
         if type_current_line == -1:
             raise ValueError(
-                f'In "{path}/{CONTENT_FILE}" on line {current_line_number}:\nUnexpected line'
+                f'In "{path}/{"content.txt"}" on line {current_line_number}:\nUnexpected line'
             )
         elif type_current_line == 0:
             if len(current_line.strip()) != 0:
                 raise ValueError(
-                    f'In "{path}/{CONTENT_FILE}" on line {current_line_number}:\nInvalid content format'
+                    f'In "{path}/{"content.txt"}" on line {current_line_number}:\nInvalid content format'
                 )
             current_line_number += 1
         else:
@@ -185,7 +188,7 @@ def create_exam_document(path: str, exam_content: str):
                         array_option = content_line.split(")", 1)
                         if len(array_option) != 2:
                             raise ValueError(
-                                f'In "{path}/{CONTENT_FILE}" on line {current_line_number + index}:\nInvalid option format'
+                                f'In "{path}/{"content.txt"}" on line {current_line_number + index}:\nInvalid option format'
                             )
                         order_option, content_option = array_option
                         question_paragraph.add_run(
@@ -206,7 +209,7 @@ def create_exam_document(path: str, exam_content: str):
                         array_option = content_line[1:].split(")", 1)
                         if len(array_option) != 2:
                             raise ValueError(
-                                f'In "{path}/{CONTENT_FILE}" on line {current_line_number + index}:\nInvalid correct option format'
+                                f'In "{path}/{"content.txt"}" on line {current_line_number + index}:\nInvalid correct option format'
                             )
                         order_option, content_option = array_option
                         order_option_runner = question_paragraph.add_run(
@@ -227,22 +230,22 @@ def create_exam_document(path: str, exam_content: str):
                         index_separator = content_line.find(".")
                         if index_separator == -1:
                             raise ValueError(
-                                f'In "{path}/{CONTENT_FILE}" on line {current_line_number + index}:\nInvalid question content format'
+                                f'In "{path}/{"content.txt"}" on line {current_line_number + index}:\nInvalid question content format'
                             )
                         array_answer = content_line.split(".", 1)
                         if len(array_answer) != 2:
                             raise ValueError(
-                                f'In "{path}/{CONTENT_FILE}" on line {current_line_number + index}:\nInvalid question content format'
+                                f'In "{path}/{"content.txt"}" on line {current_line_number + index}:\nInvalid question content format'
                             )
                         number_question, content_question = array_answer
                         if not number_question.isnumeric():
                             raise ValueError(
-                                f'In "{path}/{CONTENT_FILE}" on line {current_line_number + index}:\nInvalid question content format'
+                                f'In "{path}/{"content.txt"}" on line {current_line_number + index}:\nInvalid question content format'
                             )
 
                         if question_paragraph is not None:
                             raise ValueError(
-                                f'In "{path}/{CONTENT_FILE} on line {current_line_number + index}:\nInvalid question content format'
+                                f'In "{path}/{"content.txt"} on line {current_line_number + index}:\nInvalid question content format'
                             )
 
                         question_paragraph = doc.add_paragraph()
@@ -269,10 +272,10 @@ def create_exam_document(path: str, exam_content: str):
     footer.add_run("- Thí sinh không được sử dụng tài liệu;\n").italic = True
     footer.add_run("- Cán bộ coi thi không giải thích gì thêm.").italic = True
 
-    doc.save(f"{path}/{DOCX_FILE}")
+    doc.save(os.path.join(path, DOCX_FILE))
 
     print(
         "[blue]    └── [/blue]"
         "[green]Đã tạo file docx thành công: [/green]"
-        f"[white]{path}/{DOCX_FILE}[/white]"
+        f"[white]{os.path.join(path, DOCX_FILE)}[/white]"
     )

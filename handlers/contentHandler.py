@@ -1,302 +1,158 @@
+import importlib.util
+import json
 import os
 import random
-from pathlib import Path
+import shutil
 
 import dotenv
-import toml
-from openai import OpenAI
 from rich import print
 from rich.prompt import Confirm
-from toml import TomlDecodeError
-
-from handlers.const import CONTENT_FILE
 
 dotenv.load_dotenv()
 
-API_KEY = os.environ.get("API_KEY")
-BASE_URL = "https://openrouter.ai/api/v1/"
-MODEL = os.environ.get("MODEL") or "google/gemini-2.0-pro-exp-02-05:free"
+
+def load_handler(handler_type: str, handler_name: str):
+    handler_path = os.path.join("handlers", handler_type, f"{handler_name}.py")
+
+    if not os.path.exists(handler_path):
+        raise ImportError(f"Module {handler_name} not found at {handler_path}.")
+
+    module_name = f"handlers.{handler_type}.{handler_name.replace('/', '.')}"
+
+    spec = importlib.util.spec_from_file_location(module_name, handler_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+    if not hasattr(module, "handler"):
+        raise ImportError(f"Module {handler_name} does not define function handler.")
+
+    return module.handler
 
 
-def get_prompt(prompt_dir: str):
-    with open(prompt_dir, "r", encoding="utf-8") as prompt_file:
-        # Read prompt content from file at prompt_dir
-        prompt_content = prompt_file.read()
+def content_handler(
+    path: str, config_global: dict, config_per_prompt: dict, always_use_llm: bool
+):
+    content_dir = os.path.join(path, "content.txt")
 
-        # Remove comments from prompt content
-        stack_comment_symbols = []
-        buffer_comment_symbols = ""
-        parsed_prompt_content = ""
-        for index, char in enumerate(prompt_content):
-            if len(stack_comment_symbols) > 0:
-                if stack_comment_symbols[-1] == "//":
-                    if char == "\n":
-                        parsed_prompt_content += "\n"
-                        stack_comment_symbols.pop()
-                    continue
-                elif stack_comment_symbols[-1] == "/*":
-                    if (
-                        char == "/"
-                        and index - 1 >= 0
-                        and prompt_content[index - 1] == "*"
-                    ):
-                        stack_comment_symbols.pop()
-                    continue
-                else:
-                    raise SyntaxError(
-                        f"Invalid comment syntax: {stack_comment_symbols[-1]}"
-                    )
-            if char == "/":
-                if buffer_comment_symbols == "/":
-                    stack_comment_symbols.append("//")
-                    buffer_comment_symbols = ""
-                elif buffer_comment_symbols == "":
-                    buffer_comment_symbols = "/"
-                else:
-                    raise BufferError(
-                        f"Invalid comment syntax in buffer: {buffer_comment_symbols}"
-                    )
-            elif char == "*":
-                if buffer_comment_symbols == "/":
-                    stack_comment_symbols.append("/*")
-                    buffer_comment_symbols = ""
-                elif buffer_comment_symbols == "":
-                    parsed_prompt_content += char
-                else:
-                    raise BufferError(
-                        f"Invalid comment syntax in buffer: {buffer_comment_symbols}"
-                    )
-            else:
-                if buffer_comment_symbols == "/":
-                    parsed_prompt_content += buffer_comment_symbols
-                    parsed_prompt_content += char
-                    buffer_comment_symbols = ""
-                elif buffer_comment_symbols == "":
-                    parsed_prompt_content += char
-                else:
-                    raise BufferError(
-                        f"Invalid comment syntax in buffer: {buffer_comment_symbols}"
-                    )
-
-    return parsed_prompt_content
-
-
-def toml_to_dict(content_toml: str):
-    lines = content_toml.splitlines()
-    if lines[0] == "```toml" and lines[-1] == "```":
-        content_dict = toml.loads("\n".join(lines[1:-1]))
-    else:
-        content_dict = toml.loads(content_toml)
-    return content_dict
-
-
-def dict_to_qti_compatible(content_dict: dict, shuffle: bool):
-    def _get_indented_multiline_str(s: str):
-        lines = [line.strip() for line in s.splitlines()]
-        result = lines[0]
-        for line in lines[1:]:
-            result += f"\n        {line}"  # Should be enough
-        return result
-
-    content = ""
-    problems = [value for _, value in sorted(content_dict.items())]
-    if shuffle:
-        random.shuffle(problems)
-
-    for i, problem in enumerate(problems):
-        content += f"{i + 1}. {_get_indented_multiline_str(problem['question'])}\n"
-        for j, choice in enumerate(problem["choices"]):
-            choice_prefix = (
-                f"{'*' if j == problem['correct_index'] else ''}{chr(ord('a') + j)})"
+    if os.path.isfile(content_dir):
+        do_overwrite = Confirm.ask(
+            (
+                "[yellow]Bạn có muốn ghi đè lên nội dung đề thi định dạng QTI-compatible tại [/yellow]"
+                f"[white]{content_dir}[/white]"
+                "[yellow]?[/yellow]"
             )
-            content += f"{choice_prefix} {_get_indented_multiline_str(choice)}\n"
-        content += "\n"
+        )
+        if not do_overwrite:
+            print(
+                (
+                    "[blue]│   └── [/blue]"
+                    "[green]Đã đọc nội dung đề thi định dạng QTI-compatible thành công: [/green]"
+                    f"[white]{content_dir}[/white]"
+                )
+            )
 
-    return content
+            with open(content_dir, "r", encoding="utf-8") as log:
+                return log.read()
 
+    content_dict = {}
+    n_prompts = len(config_per_prompt)
+    for i, (key, config_per_prompt_curr) in enumerate(config_per_prompt.items()):
+        prompt_name = config_per_prompt_curr["prompt"]
 
-def get_exam_content(mode: str, path: str, prefer_llm: bool, shuffle: bool):
-    content_dir = f"{path}/{CONTENT_FILE}"
-
-    if mode == "manual":
         print(
             (
-                "[blue]│   └── [/blue]"
-                f"[green]Nội dung đề thi định dạng QTI-compatible sẽ được đọc từ: [white]{content_dir}[/white][/green]"
+                "[blue]│   ├── [/blue]"
+                f"[yellow]Đang xử lí batch {i + 1}/{n_prompts} (prompt: [white]{prompt_name}[/white])..."
             )
         )
 
-        with open(content_dir, "r", encoding="utf-8") as log:
-            return log.read()
+        prompt_dir = os.path.join("prompts", f"{prompt_name}.txt")
+        prompt_copy_dir = os.path.join(path, prompt_dir)
+        os.makedirs(os.path.dirname(prompt_copy_dir), exist_ok=True)
+        shutil.copy(prompt_dir, os.path.join(path, prompt_dir))
 
-    client = OpenAI(api_key=API_KEY, base_url=BASE_URL)
+        content_curr_dict = {}
 
-    if mode == "generated_qti":
-        # _bqn: i'm not maintaining this
-        content = ""
-
-        for prompt_dir in sorted(Path("prompts").iterdir()):
-            prompt_name = prompt_dir.stem
-
-            print(
-                (
-                    "[blue]│   ├── [/blue]"
-                    f"[green]Đang xử lí prompt [white]{prompt_name}[/white]...[/green]"
-                )
-            )
-
-            log_dir = f"{path}/logs/{prompt_name}.txt"
-            content_curr = ""
-
-            do_let_llm_generate_content = prefer_llm or Confirm.ask(
-                f"[yellow]Bạn có muốn để [white]{MODEL}[/white] sinh nội dung của [white]{log_dir}[/white]?[/yellow]"
-            )
-
-            if do_let_llm_generate_content:
-                response = client.chat.completions.create(
-                    model=MODEL,
-                    messages=[{"role": "user", "content": get_prompt(prompt_dir)}],
-                )
-                content_curr = response.choices[0].message.content
-                assert content_curr is not None
-
-                with open(log_dir, "w+", encoding="utf-8") as log:
-                    log.write(content_curr)
-            else:
-                with open(log_dir, "r", encoding="utf-8") as log:
-                    content_curr = log.read()
-
-            content += f"{content_curr}\n"
+        n_attempts = 0
+        succeeded = False
+        while not succeeded:
+            n_attempts += 1
 
             print(
-                (
-                    "[blue]│   │   └── [/blue]"
-                    + f"[green]Đã đọc nội dung đề thi được sinh bởi prompt [white]{prompt_name}[/white] thành công.[/green]"
-                )
+                f"[blue]│   │   ├── [/blue][yellow]Lần chạy #{n_attempts}...[/yellow]"
             )
 
-        with open(content_dir, "w+", encoding="utf-8") as log:
-            log.write(content)
-
-    if mode == "generated_toml":
-        content_dict = {}
-
-        for prompt_dir in sorted(Path("prompts").iterdir()):
-            prompt_name = prompt_dir.stem
-
-            print(
-                (
-                    "[blue]│   ├── [/blue]"
-                    f"[yellow]Đang xử lí prompt [white]{prompt_name}[/white]..."
-                )
+            do_use_llm = always_use_llm or Confirm.ask(
+                "[yellow]Bạn có muốn dùng LLM để sinh mới nội dung?[/yellow]"
             )
 
-            log_dir = f"{path}/logs/{prompt_name}.toml"
-            content_curr_dict = {}
+            log_dir = os.path.join(path, "logs", f"{key}.json")
 
-            n_attempts = 0
-            succeeded = False
-            while not succeeded:
-                n_attempts += 1
+            try:
+                if do_use_llm:
+                    front_handler = load_handler(
+                        "frontHandlers", config_per_prompt_curr["front_handler"]
+                    )
+                    n_problems = config_per_prompt_curr["n_problems"]
 
+                    prompt_dir = os.path.join("prompts", f"{prompt_name}.txt")
+                    with open(prompt_dir, "r", encoding="utf-8") as log:
+                        prompt_content = log.read()
+
+                    content_curr_dict = front_handler(prompt_content, n_problems)
+
+                    with open(log_dir, "w+", encoding="utf-8") as log:
+                        json.dump(content_curr_dict, log, ensure_ascii=False, indent=4)
+                else:
+                    with open(log_dir, "r", encoding="utf-8") as log:
+                        content_curr_dict = json.load(log)
+                succeeded = True
+
+            except Exception as error_msg:
                 print(
                     (
-                        "[blue]│   │   ├── [/blue]"
-                        f"[yellow]Lần chạy #{n_attempts}...[/yellow]"
+                        "[blue]│   │   │   ├── [/blue]"
+                        f"[red]Thông báo lỗi: [/red]"
+                        f"[white]{error_msg}[/white]"
                     )
                 )
-
-                do_let_llm_generate_content = prefer_llm or Confirm.ask(
-                    f"[yellow]Bạn có muốn để [white]{MODEL}[/white] sinh nội dung của [white]{log_dir}[/white]?[/yellow]"
+                print(
+                    (
+                        "[blue]│   │   │   ├── [/blue]"
+                        f"[red]Xin hãy kiểm tra nội dung đề thi định dạng JSON tại: [/red]"
+                        f"[white]{log_dir}[/white]"
+                    )
                 )
+                print("[blue]│   │   │   └── [/blue][yellow]Đang thử lại...[/yellow]")
 
-                try:
-                    if do_let_llm_generate_content:
-                        response = client.chat.completions.create(
-                            model=MODEL,
-                            messages=[
-                                {"role": "user", "content": get_prompt(prompt_dir)}
-                            ],
-                        )
-                        content_curr_raw = response.choices[0].message.content
-                        assert content_curr_raw is not None
+        content_dict.update(
+            {f"{key}_{_key}": _value for _key, _value in content_curr_dict.items()}
+        )
 
-                        with open(log_dir, "w+", encoding="utf-8") as log:
-                            log.write(content_curr_raw)
-                    else:
-                        with open(log_dir, "r", encoding="utf-8") as log:
-                            content_curr_raw = log.read()
-                    content_curr_dict = toml_to_dict(content_curr_raw)
-                    succeeded = True
-
-                except TomlDecodeError as error_msg:
-                    print(
-                        (
-                            "[blue]│   │   │   ├── [/blue]"
-                            f"[red]Thông báo lỗi: [/red]"
-                            f"[white]{error_msg}[/white]"
-                        )
-                    )
-                    print(
-                        (
-                            "[blue]│   │   │   ├── [/blue]"
-                            f"[red]Xin hãy kiểm tra nội dung đề thi định dạng TOML đã được tạo ở: [/red]"
-                            f"[white]{log_dir}[/white]"
-                        )
-                    )
-                    print(
-                        (
-                            "[blue]│   │   │   └── [/blue]"
-                            "[yellow]Đang thử lại...[/yellow]"
-                        )
-                    )
-
-                except FileNotFoundError as error_msg:
-                    print(
-                        (
-                            "[blue]│   │   │   ├── [/blue]"
-                            f"[red]Thông báo lỗi: [/red]"
-                            f"[white]{error_msg}[/white]"
-                        )
-                    )
-                    print(
-                        (
-                            "[blue]│   │   │   ├── [/blue]"
-                            f"[red]Xin hãy đảm bảo rằng tồn tại nội dung đề thi định dạng TOML ở: [/red]"
-                            f"[white]{log_dir}[/white]"
-                        )
-                    )
-                    print(
-                        (
-                            "[blue]│   │   │   └── [/blue]"
-                            "[yellow]Đang thử lại...[/yellow]"
-                        )
-                    )
-
-            content_dict.update(
-                {
-                    f"{prompt_name}_{key}": value
-                    for key, value in content_curr_dict.items()
-                }
+        print(
+            (
+                "[blue]│   │   └── [/blue]"
+                + f"[green]Đã đọc nội dung đề thi được sinh bởi prompt [white]{prompt_name}[/white] thành công.[/green]"
             )
+        )
 
-            print(
-                (
-                    "[blue]│   │   └── [/blue]"
-                    + f"[green]Đã đọc nội dung đề thi được sinh bởi prompt [white]{prompt_name}[/white] thành công.[/green]"
-                )
-            )
+    do_shuffle = config_global["shuffle"]
+    if do_shuffle:
+        content_dict_items = list(content_dict.items())
+        random.shuffle(content_dict_items)
+        content_dict = dict(content_dict_items)
 
-        with open(content_dir, "w+", encoding="utf-8") as log:
-            log.write(dict_to_qti_compatible(content_dict, shuffle))
+    back_handler = load_handler("backHandlers", config_global["back_handler"])
+    content = back_handler(content_dict, path)
+
+    content_dir = os.path.join(path, "content.txt")
+    with open(content_dir, "w+", encoding="utf-8") as log:
+        log.write(content)
 
     print(
         (
             "[blue]│   └── [/blue]"
-            + "[green]Đã tạo nội dung đề thi định dạng QTI-compatible thành công: [/green]"
-            + f"[white]{content_dir}[/white]"
+            "[green]Đã tạo nội dung đề thi định dạng QTI-compatible thành công: [/green]"
+            f"[white]{content_dir}[/white]"
         )
     )
-
-    with open(content_dir, "r", encoding="utf-8") as log:
-        return log.read()

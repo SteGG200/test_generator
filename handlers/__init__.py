@@ -1,3 +1,3 @@
-from handlers.contentHandler import get_exam_content
-from handlers.docxHandler import create_exam_document
-from handlers.qtiHandler import convert_to_QTI
+from handlers.contentHandler import content_handler
+from handlers.docxHandler import docx_handler
+from handlers.qtiHandler import qti_handler

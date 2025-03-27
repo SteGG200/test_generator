@@ -1,0 +1,110 @@
+Giúp mình tạo một đề thi về chủ đề Cơ sở dữ liệu cho học sinh Trung học Phổ thông.
+
+Dưới đây là nội dung kiến thức các bạn học sinh đã học.
+Đây chỉ là gợi ý, bạn hoàn toàn có thể sử dụng chúng như từ khóa để nghĩ ra những câu hỏi sáng tạo.
+
+```
+# Giới thiệu các hệ cơ sở dữ liệu
+
+- **xử lí thông tin trong bài toán quản lí**:
+
+    - _tạo lập hồ sơ_: yêu cầu dữ liệu đầy đủ, chính xác
+    - _cập nhật dữ liệu_: gồm các thao tác thêm, sửa, xóa dữ liệu
+    - _khai thác thông tin_: chẳng hạn tìm kiếm dữ liệu, thống kê, lập báo cáo
+
+- **cơ sở dữ liệu (CSDL)**
+
+    - là tập hồ sơ dữ liệu làm cơ sở cho việc quản lí các hoạt động của một tổ
+      chức
+    - được số hóa để máy tính truy cập, cập nhật và xử lí
+
+- **hệ quản trị CSDL**
+
+    - còn gọi là _DBMS (Database Management System)_
+    - giúp người dùng tương tác với CSDL qua giao diện dễ hiểu, dễ dùng
+    - tạo môi trường thuận lợi để tạo lập, lưu trữ, khai thác dữ liệu của CSDL
+
+- **CSDL quan hệ**
+
+    - là tập hợp các bảng dữ liệu có liên quan với nhau
+
+        > trong bảng của CSDL quan hệ, mỗi hàng còn gọi là _bản ghi_, mỗi hàng
+        > còn gọi là _trường_
+
+    - có thể có các _ràng buộc dữ liệu_ để đảm bảo tính xác định và đúng đắn của
+      dữ liệu
+
+- **khóa**
+
+    - là tập hợp trường mà mỗi bộ giá trị của các trường đó _xác định duy nhất
+      một bản ghi_, đồng thời _không thể bỏ bớt bất cứ trường nào_ mà tập hợp
+      các trường còn lại vẫn còn tính chất đó
+    - bảng có thể có nhiều khóa, _khóa chính_ thường được chọn là khóa gồm ít
+      trường nhất
+
+- **khóa ngoài**
+
+    - là _một số trường của bảng này (bảng tham chiếu)_ mà đồng thời là _khóa
+      của bảng khác (bảng được tham chiếu)_
+    - giải quyết vấn đề dư thừa dữ liệu
+    - **ràng buộc khóa ngoài**: mọi giá trị của khóa ngoài ở bảng tham chiếu
+      phải xuất hiện trong giá trị khóa ở bảng được tham chiếu
+
+- **biểu mẫu**
+
+    - giao diện thuận tiện giúp người dùng làm việc với CSDL tùy theo mục đích
+    - **biểu mẫu cho xem dữ liệu**: hỗ trợ chẳng hạn chỉ hiện thị dữ liệu người
+      dùng cần hoặc được phép xem, được sắp xếp theo thứ tự nào đó, được lọc
+      theo tiêu chí nào đó
+    - **biểu mẫu cho cập nhật dữ liệu**: được thiết kế giúp tránh vi phạm ràng
+      buộc toàn vẹn, ràng buộc miền giá trị
+```
+
+```
+# Giới thiệu ngôn ngữ SQL
+
+- **SQL**:
+
+    - Viết tắt của Structured Query Language
+    - Gồm 3 phần: DDL (Data Definition Language-ngôn ngữ định nghĩa dữ liệu),
+      DML (Data Manipulation Language-ngôn ngữ thao tác dữ liệu) và DCL (Data
+      Control Language-ngôn ngữ kiểm soát dữ liệu)
+
+- **Khởi tạo CSDL**:
+
+    - Các truy vấn DDL và chức năng:
+
+        - CREATE DATABASE --> Khởi tạo CSDL
+        - CREATE TABLE --> Khởi tạo bảng
+        - ALTER TABLE --> Thay đổi định nghĩa bảng
+        - PRIMARY KEY --> Khai báo khóa chính
+        - FOREIGN KEY... REFERENCES... --> Khai báo khóa ngoài
+
+    - Kiểu dữ liệu:
+        - CHAR(n) hoặc CHARACTER(n): xâu có độ dài n, nếu độ dài ko quá n thì
+          bên phải có các kí tự trống
+        - VARCHAR(n) : xâu có độ dài không đổi, không vượt quá n kí tự
+        - BOOLEAN : kiểu logic, đúng (1), sai (0)
+        - INT hoặc INTEGER: Số nguyên
+        - REAL: Số thực dấu phẩy động
+        - DATE: ngày tháng, dạng 'YYYY:MM:DD'
+        - TIME: giờ phút, dạng 'HH:MM:SS'
+
+- **Cập nhật và truy xuất CSDL**:
+
+    - Câu truy vấn truy xuất dữ liệu: SELECT <dữ liệu cần lấy>
+        - WHERE <điều kiện>: chọn các dòng thỏa mãn điều kiện
+        - ORDER BY <tên trường>: sắp xếp dòng theo thứ tự chỉ định
+        - INNER JOIN: Liên kết các bảng theo điều kiện
+    - Câu truy vấn cập nhật dữ liệu:
+        - INSERT INTO <tên bảng> VALUES <danh sách giá trị>: Thêm dữ liệu vào
+          bảng với giá trị lấy từ danh sách giá trị
+        - DELETE FROM <tên bảng> WHERE <điều kiện>: Xóa các dòng trong bảng thỏa
+          mãn điều kiện xác định
+        - UPDATE <tên bảng> SET <tên trường> = <giá trị>: cập nhật giá trị của
+          một trường trong bảng
+
+- **Kiểm soát quyền truy cập CSDL**:
+    - GRANT: cấp quyền cho người dùng
+    - REVOKE: thu hồi quyền đối với người dùng
+```
