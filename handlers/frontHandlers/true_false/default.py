@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field, create_model
 dotenv.load_dotenv()
 
 API_KEY = os.environ.get("API_KEY")
-MODEL = os.environ.get("MODEL") or "google/gemini-2.0-pro-exp-02-05:free"
+MODEL = os.environ.get("MODEL") or "gemini-2.0-pro-exp-02-05"
 
 client = genai.Client(api_key=API_KEY)
 
@@ -27,9 +27,13 @@ class StatementsPair(BaseModel):
 
 
 class QuestionBlock(BaseModel):
+    question_context: str = Field(
+        ...,
+        description="The question's context.",
+    )
     question: str = Field(
         ...,
-        description="The question itself, providing context, numbers, events, etc. MUST BE CONSISTENT WITH THE VARIABLES ABOVE.",
+        description="The question itself, providing context, numbers, events, etc. MUST INCLUDE THE CONTEXT ABOVE. Be LONG and VERY DETAILED!",
     )
     solution: str = Field(
         ...,

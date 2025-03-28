@@ -8,6 +8,6 @@ n_problems = 24
 front_handler = "multiple_choice/default"
 
 [[batch]]
-prompt = "informatics/database"
+prompt = "informatics/database_true_false"
 n_problems = 4
 front_handler = "true_false/default"
