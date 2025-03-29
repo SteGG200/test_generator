@@ -1,152 +1,183 @@
 # Exam Generator Tool
 
-Exam Generator is a python tool for generating exam
+> [!WARNING]
+> Still in beta. Breaking changes are expected without notice. Please read
+> the documentation carefully.
 
-This tool uses API from [OpenRouter](https://openrouter.ai/)
+Exam Generator is a python tool for generating exam.
+
+This tool uses API from [OpenRouter](https://openrouter.ai/).
 
 ## Table of Contents
 
 - [Installation](#installation)
-- [Basic usage](#basic-usage)
-- [Customizing the prompt](#customizing-the-prompt)
+- [Usage](#usage)
+- [More information](#more-information)
 
 ## Installation
 
-**Requirements tool**:
+### Python
 
-- python 3.8+
+Python 3.9+ is tested and officially supported.
 
-For Unix systems:
+Install dependencies with the following commands.
 
-```bash
-python -m venv venv
-source ./venv/bin/activate
-pip install -r requirements.txt
-```
+- For Unix systems:
 
-For Windows Powershell:
+    ```bash
+    python -m venv venv
+    source ./venv/bin/activate
+    pip install -r requirements.txt
+    ```
 
-```powershell
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-```
+    [devenv](https://devenv.sh/) users can simply clone this repository then run
+    `devenv shell` to drop into a virtual environment with the necessary
+    dependencies.
 
-Then, create a file `.env` at the root of the project and set variables like this:
+- For Windows Powershell:
+
+    ```powershell
+    python -m venv venv
+    .\venv\Scripts\Activate.ps1
+    pip install -r requirements.txt
+    ```
+
+### API key
+
+Create a file `.env` at the root of the project and set the following variables.
+`API_KEY` is required, `MODEL` is optional.
 
 ```env
-API_KEY='<YOUR_OPENROUTER_API_KEY>'
-MODEL='<OPENROUTER_MODEL>'
+API_KEY=<YOUR_API_KEY>
+MODEL=<MODEL>
 ```
 
-**Note**:
+> [!NOTE]
+> Google AI Studio API key is preferred and officialy supported. Front handler
+> `legacy` use OpenRouter API key. To use another API key, you can write a
+> custom front handler.
 
-- `API_KEY` is required, `MODEL` is optional.
-- If you don't set the `MODEL` variable, the tool will automatically use the `google/gemini-2.0-pro-exp-02-05:free` model.
+## Usage
 
-## Basic usage
+For basic usage, customise `config.toml` to your own liking and simply run
+`python main.py`.
 
-To run the tool, use following command:
+Find all options by running `python main.py --help`.
 
-```bash
-python main.py
+```
+$ python main.py --help
+
+Usage: main.py [OPTIONS]
+
+Generate a contest from prompts.
+
+Options:
+  -c, --config=STR         Path to config file. (default: config.toml)
+  -o, --output=STR         Path to output. Will be created if not exists. (default: dist/{datetime})
+  -r, --raw-content-only   docx and QTI zip files will not be generated.
+  -a, --always-use-llm     Always use LLM to generate content instead of asking each time.
+
+Other actions:
+  -h, --help               Show the help
 ```
 
-It generates the following output files inside folder `dist/{timeCreated}/`:
+### Config file
 
-```yaml
-dist/{timeCreated}:
-  - content.txt # Response from OpenRouter API
-  - qti.zip # QTI file for Canvas
-  - dethi.docx # Microsoft Word File
+The default config file is at `config.toml`.
+
+```toml
+# config.toml
+
+[global]
+shuffle = false
+back_handler = "default"
+
+[[batch]]
+prompt = "informatics/database"
+n_problems = 24
+front_handler = "multiple_choice/default"
+
+[[batch]]
+prompt = "informatics/database"
+n_problems = 4
+front_handler = "true_false/default"
 ```
 
-## Customizing the prompt
+This config file specifies 2 batches. The first one contains 24 problems, using
+front handler `multiple_choice/default`. The second one contains 4 problems,
+using front handler `true_false/default`. Note how both uses the prompt
+`informatics/database`.
 
-The tool will use the prompt saved in `prompt.txt` file to send to model API. If `prompt.txt` doesn't exist, the default prompt from `prompt.example.txt` file will be used instead.
+Explanation:
 
-However, you must ensure that the `content.txt` file, which is the response from model API, follows the format below (assuming that option b is the correct answer):
+- `front_handler = "multiple_choice/default"`:
 
-```txt
-[Number]. [Question]
-a) [Option a]
-*b) [Option b]
-c) [Option c]
-d) [Option d]
+    - [`handlers/frontHandlers/multiple_choice/default.py`](handlers/frontHandlers/multiple_choice/default.py)
+      must contain the function `handler(prompt_content, n_problems)`.
+
+    - `prompt_content` is the prompt to be sent to the LLM.
+
+    - `n_problems` is the number of problems to be generated.
+
+    - The function returns a `dict` (to be written to and read from JSON files).
+
+- `back_handler = "default"`
+
+    - [`handlers/backHandlers/default.py`](handlers/backHandlers/default.py)
+      must contain the function `handler(content_dict, path)`.
+
+    - `content_dict` is a dict that maps `batch_{id}` to the LLM's response
+      (given by `front_handler`) for that batch.
+
+    - `path` is the output path. Useful if you want to generate images to be
+      attached.
+
+    - The function returns a `str` (to be written to the txt content file).
+
+- `prompt = "informatics/database"`:
+
+    - Specifies the prompt at
+      [`prompts/informatics/database.txt`](handlers/frontHandlers/multiple_choice/default.py).
+
+- `n_problems = 4`:
+
+    - Specifies the number of problems this batch should generate, in this
+      case 4.
+
+    - Sometimes the expected output length may exceed the LLM's limit. In this
+      case, you can specify multiple batches while using the same `prompt` and
+      `front_handler`.
+
+- `shuffle = false`:
+
+    - Generated problems will not be shuffled. Useful when there are multiple
+      batches.
+
+### Output
+
+The default output path is `dist/{datetime}`. The directory structure is as
+follows.
+
+```
+dist
+├── {datetime}:
+│     ├── assets
+│     │     └── ... # Images to be attached if needed.
+│     ├── logs
+│     │     └── ... # LLM outputs in JSON format.
+│     ├── prompts
+│     │     └── ... # Copies of the prompts used.
+│     ├── content.txt # Contest problems in QTI-compatible txt format.
+│     ├── dethi.docx # Contest problems in docx format.
+│     └── qti.zip # QTI file for Canvas.
+└── ...
 ```
 
-A correct answer always begins with a asterisk (\*).
+> [!WARNING]  
+> Docx generation is currently NOT supported for true/false questions.
 
-About multi-line question or multi-line answer:
+## More information
 
-```txt
-|
-| /* Indentation:
-| Question or answer that oppucies more than 1 line
-| must have at least this indentation*/
-| |
-1. [Question]
-| |
-| [Question continued, so indentation]
-| |
-a) [Possible answer]
-| |
-| [Possible answer continued, so indentation]
-| |
-*b) [Correct answer]
-|
-...
-```
+For more information about the QTI-compatible text format, consult
+[the `text2qti` repository](https://github.com/gpoore/text2qti).
 
-For example:
-
-````txt
-1. Thuộc tính CSS nào được sử dụng để thay đổi màu chữ của một phần tử?
-a) `font-color`
-*b) `color`
-c) `text-color`
-d) `foreground-color`
-
-2. Đoạn mã:
-  ```
-  <ol type="A" start="3">
-    <li>Item 1</li>
-    <li>Item 2</li>
-  </ol>
-  ```
-	Kết quả hiển thị sẽ như thế nào?
-a) 1. Item 1
-  2. Item 2
-b) A. Item 1
-  B. Item 2
-*c) C. Item 1
-  D. Item 2
-d) 3. Item 1
-  4. Item 2
-````
-
-**Note**: code block like HTML tags should be put in backticks to ensure QTI output is correct.
-
-### Comment in prompt:
-
-Use `//` or `/**/` syntax to comment in your prompt.
-
-```txt
-// This line isn't included in the prompt
-
-/*
-This is also comment
-and isn't included.
-*/
-```
-
-## Directory Structure
-
-```yaml
-handler:
-  - apiHandler # Handler prompting and returning responses from OpenRouter API
-  - convertHandler # Handler converting exam content to QTI file
-  - docxHandler # Handler generating file docx
-main # Entry point
-test
-```

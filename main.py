@@ -1,81 +1,118 @@
-from handler import get_exam_content, create_exam_document, convert_to_QTI
-from handler.const import DOCX_FILE, CONTENT_FILE, QTI_FILE
-from datetime import datetime
 import os
-from enum import Enum
-from typing import Tuple, List
+from datetime import datetime
+from pathlib import Path
 
-class Task(Enum):
-	CONTENT = 1 # task get content from model ai
-	QTI = 2 # task convert content.txt to QTI file
-	DOCX = 3 # task convert content.txt to docx file
+import tomli
+from clize import ArgumentError, run
+from rich import print
 
-def uncomplete_run_detection() -> Tuple[str, List[Task]]:
-	path = './dist'
-	if not os.path.exists(path):
-		return ("", [])
+from handlers import content_handler, docx_handler, qti_handler
 
-	children: list[str] = []
+CONFIG_FILE = "config.toml"
+PROMPTS_DIR = "prompts"
 
-	for entry in os.listdir(path):
-		try:
-			datetime.strptime(entry, '%Y%m%d_%H%M%S')
-			children.append(entry)
-		except:
-			continue
 
-	children.sort(key=lambda child: datetime.strptime(child, '%Y%m%d_%H%M%S'))
+def generate(
+    *,
+    config: "c" = "config.toml",
+    output: "o" = None,
+    raw_content_only: "r" = False,
+    always_use_llm: "a" = False,
+):
+    """
+    Generate a contest from prompts.
 
-	latest_run = children[-1]
-	task_to_complete = {Task.CONTENT, Task.QTI, Task.DOCX}
+    :param config: Path to config file.
+    :param output: Path to output. Will be created if not exists. (default: dist/{datetime})
+    :param raw_content_only: docx and QTI zip files will not be generated.
+    :param always_use_llm: Always use LLM to generate content instead of asking each time.
+    """
 
-	for entry in os.listdir(os.path.join(path, latest_run)):
-		if entry == CONTENT_FILE:
-			task_to_complete.remove(Task.CONTENT)
-		elif entry == QTI_FILE:
-			task_to_complete.remove(Task.QTI)
-		elif entry == DOCX_FILE:
-			task_to_complete.remove(Task.DOCX)
-	
-	if len(task_to_complete) > 0:
-		user_decision = input("The previous run doesn't seem to have finished yet, do you want to continue it? (y/n): ")
-		if user_decision.lower() == 'y' or user_decision.lower() == 'yes':
-			return (f"{path}/{latest_run}", list(task_to_complete))
-		else:
-			print("The new run is creating...")
-			return ("", [])
-	else:
-		return ("", [])
+    if not os.path.isfile(config):
+        os.makedirs(config, exist_ok=True)
 
-def main():
-	# Check if user want to re-run the previous uncompleted run
-	uncompleted_tasks = uncomplete_run_detection()
+    if output is None:
+        output = os.path.join("dist", datetime.now().strftime("%Y%m%d_%H%M%S"))
+    elif not os.path.isdir(output):
+        raise ArgumentError(f"Not a directory: {output}")
 
-	path, tasks_to_run = uncompleted_tasks
-	if len(tasks_to_run) == 0:
-		path = f"./dist/{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-		if not os.path.exists(path):
-			os.makedirs(path)
-		tasks_to_run.extend([Task.CONTENT, Task.QTI, Task.DOCX])
+    with open(config, "r", encoding="utf-8") as log:
+        config_all = tomli.loads(log.read())
 
-	if Task.CONTENT in tasks_to_run:
-		# Get exam content from API
-		print("Đang tạo nội dung đề thi...")
-		get_exam_content(path)
-	
-	content_file = open(f"{path}/{CONTENT_FILE}", "r", encoding="utf-8")
-	exam_content = content_file.read()
-	content_file.close()
+    print(f"[green]Đã đọc config file tại [white]{config}[/white] thành công.[/green]")
 
-	if Task.QTI in tasks_to_run:
-		# Create QTI file
-		print("Đang tạo tài liệu QTI...")
-		convert_to_QTI(path, exam_content)
+    keys_global = ["shuffle", "back_handler"]
+    keys_per_prompt = ["prompt", "n_problems", "front_handler"]
 
-	if Task.DOCX in tasks_to_run:
-		# Create document
-		print("Đang tạo tài liệu docx...")
-		create_exam_document(path, exam_content)
+    config_global = config_all.get("global", {})
+
+    for key in keys_global:
+        if key not in config_global:
+            raise KeyError(f"{key} is not specified.")
+
+    config_per_prompt = {}
+    if "batch" not in config_all:
+        print(
+            "[green]Không tìm thấy \[\[batch]] trong config file. Sẽ xử lí lần lượt tất cả prompts được tìm thấy.[/green]"
+        )
+
+        for key in keys_per_prompt:
+            if key not in config_global:
+                raise KeyError(f"{key} is not specified.")
+
+        prompt_dirs = sorted(Path("prompts").iterdir())
+        for prompt_dir in prompt_dirs:
+            config_per_prompt_curr = {
+                key: value
+                for key, value in config_global.items()
+                if key in keys_per_prompt
+            }
+            prompt_name = prompt_dir.stem
+            config_per_prompt_curr.update({"prompt": prompt_name})
+            config_per_prompt[f"batch_{prompt_name}"] = config_per_prompt_curr
+    else:
+        for i, config_per_prompt_curr_from_file in enumerate(config_all["batch"]):
+            config_per_prompt_curr = {
+                key: value
+                for key, value in config_global.items()
+                if key in keys_per_prompt
+            }
+            config_per_prompt_curr.update(config_per_prompt_curr_from_file)
+            config_per_prompt[f"batch_{i}"] = config_per_prompt_curr
+
+            for key in keys_per_prompt:
+                if key not in config_per_prompt_curr:
+                    raise KeyError(f"Batch {i}: {key} is not specified anywhere.")
+
+    path = output
+    if path == "":
+        path = f"./dist/{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    if not os.path.exists(path):
+        os.makedirs(path)
+    if not os.path.exists(os.path.join(path, "assets")):
+        os.makedirs(os.path.join(path, "assets"))
+    if not os.path.exists(os.path.join(path, "logs")):
+        os.makedirs(os.path.join(path, "logs"))
+    if not os.path.exists(os.path.join(path, "prompts")):
+        os.makedirs(os.path.join(path, "prompts"))
+
+    print(f"[yellow]Đang tạo đề thi tại [white]{path}[/white]...[/yellow]")
+
+    print("[blue]├── [/blue][yellow]Đang tạo nội dung đề thi...[/yellow]")
+
+    content_handler(path, config_global, config_per_prompt, always_use_llm)
+
+    if raw_content_only:
+        print(
+            "[blue]└── [/blue][green]File zip QTI và file docx sẽ không được tạo.[/green]"
+        )
+    else:
+        print("[blue]├── [/blue][yellow]Đang tạo file zip QTI...[/yellow]")
+        qti_handler(path)
+
+        print("[blue]└── [/blue][yellow]Đang tạo file docx...[/yellow]")
+        docx_handler(path)
+
 
 if __name__ == "__main__":
-	main()
+    run(generate)

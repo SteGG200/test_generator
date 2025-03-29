@@ -1,7 +1,11 @@
-venv/
+.devenv/
+.direnv/
 __pycache__/
 dist/
-script.bash
+temp/
+venv/
+.devenv.flake.nix
 .env
+openrouter_api_key.txt
+script.bash
 test.py
-prompt.txt
